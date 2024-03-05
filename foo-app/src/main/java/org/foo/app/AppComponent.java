@@ -31,12 +31,12 @@ public class AppComponent {
 
     @Activate
     protected void activate() {
-        log.info("Started Framework DTD ");
+        log.info("Started");
     }
 
     @Deactivate
     protected void deactivate() {
-        log.info("Stopped Framework DTD ");
+        log.info("Stopped");
     }
 
 }
