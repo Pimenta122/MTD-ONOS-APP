@@ -16,20 +16,37 @@
 package org.foo.app;
 
 import org.apache.karaf.shell.api.action.Command;
+import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
+import org.foo.app.database.DatabaseInterface;
 import org.onosproject.cli.AbstractShellCommand;
+import org.apache.karaf.shell.api.action.Argument;
 
 /**
  * Sample Apache Karaf CLI command
  */
 @Service
-@Command(scope = "onos", name = "sample",
-         description = "Sample Apache Karaf CLI command")
+@Command(scope = "onos", name = "database",
+         description = "DataBase comunications")
 public class AppCommand extends AbstractShellCommand {
+
+    @Option(name = "-t", aliases = { "--table" }, description = "specifies a database table to act on (use with flag --action)", required = false, multiValued = false)
+    String table = null;
+
+    @Argument(index = 0, name = "arg1", description = "", required = false)
+    String arg_1 = null;
 
     @Override
     protected void doExecute() {
-        print("Hello %s", "World");
+        if (table != null){
+            tableRead();
+        }
+    }
+
+    private void tableRead(){
+        DatabaseInterface db = get(DatabaseInterface.class);
+        log.info("Read on "+table);
+        db.readTable(table);
     }
 
 }
