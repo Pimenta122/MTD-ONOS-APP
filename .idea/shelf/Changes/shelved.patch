@@ -1,0 +1,519 @@
+Index: foo-app/target/classes/META-INF/MANIFEST.MF
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>Manifest-Version: 1.0\r\nBnd-LastModified: 1709655520353\r\nBuild-Jdk: 11.0.13\r\nBuilt-By: root\r\nBundle-Description: ONOS OSGi bundle archetype\r\nBundle-ManifestVersion: 2\r\nBundle-Name: foo-app\r\nBundle-SymbolicName: org.foo.app\r\nBundle-Version: 1.0.0.SNAPSHOT\r\nCreated-By: Apache Maven Bundle Plugin\r\nExport-Package: org.foo.app;uses:=\"org.apache.karaf.shell.api.action,org\r\n .apache.karaf.shell.api.action.lifecycle,org.onosproject.cli\";version=\"\r\n 1.0.0\"\r\nImport-Package: org.apache.karaf.shell.api.action;version=\"[4.2,5)\",org.\r\n apache.karaf.shell.api.action.lifecycle;version=\"[4.2,5)\",org.onosproje\r\n ct.cli;version=\"[2.0,3)\",org.slf4j;version=\"[1.7,2)\"\r\nKaraf-Commands: org.foo.app\r\nRequire-Capability: osgi.extender;filter:=\"(&(osgi.extender=osgi.compone\r\n nt)(version>=1.3.0)(!(version>=2.0.0)))\",osgi.ee;filter:=\"(&(osgi.ee=Ja\r\n vaSE)(version=1.8))\"\r\nService-Component: OSGI-INF/org.foo.app.AppComponent.xml\r\nTool: Bnd-3.5.0.201709291849\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/foo-app/target/classes/META-INF/MANIFEST.MF b/foo-app/target/classes/META-INF/MANIFEST.MF
+--- a/foo-app/target/classes/META-INF/MANIFEST.MF	(revision 3f2d9e6b374db8ed72aba096f0ebd100386dc9b8)
++++ b/foo-app/target/classes/META-INF/MANIFEST.MF	(date 1709658717498)
+@@ -1,6 +1,6 @@
+ Manifest-Version: 1.0
+-Bnd-LastModified: 1709655520353
+-Build-Jdk: 11.0.13
++Bnd-LastModified: 1709658712584
++Build-Jdk: 17.0.10
+ Built-By: root
+ Bundle-Description: ONOS OSGi bundle archetype
+ Bundle-ManifestVersion: 2
+@@ -10,13 +10,17 @@
+ Created-By: Apache Maven Bundle Plugin
+ Export-Package: org.foo.app;uses:="org.apache.karaf.shell.api.action,org
+  .apache.karaf.shell.api.action.lifecycle,org.onosproject.cli";version="
+- 1.0.0"
+-Import-Package: org.apache.karaf.shell.api.action;version="[4.2,5)",org.
+- apache.karaf.shell.api.action.lifecycle;version="[4.2,5)",org.onosproje
+- ct.cli;version="[2.0,3)",org.slf4j;version="[1.7,2)"
++ 1.0.0",org.foo.app.database;version="1.0.0"
++Import-Package: javax.sql,org.apache.karaf.shell.api.action;version="[4.
++ 2,5)",org.apache.karaf.shell.api.action.lifecycle;version="[4.2,5)",org
++ .onosproject.cli;version="[2.0,3)",org.slf4j;version="[1.7,2)"
+ Karaf-Commands: org.foo.app
++Provide-Capability: osgi.service;objectClass:List<String>="org.foo.app.d
++ atabase.DatabaseInterface"
+ Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.compone
+- nt)(version>=1.3.0)(!(version>=2.0.0)))",osgi.ee;filter:="(&(osgi.ee=Ja
+- vaSE)(version=1.8))"
+-Service-Component: OSGI-INF/org.foo.app.AppComponent.xml
++ nt)(version>=1.3.0)(!(version>=2.0.0)))",osgi.service;filter:="(objectC
++ lass=javax.sql.DataSource)";effective:=active,osgi.ee;filter:="(&(osgi.
++ ee=JavaSE)(version=1.8))"
++Service-Component: OSGI-INF/org.foo.app.AppComponent.xml,OSGI-INF/org.fo
++ o.app.database.SnortDatabase.xml
+ Tool: Bnd-3.5.0.201709291849
+Index: foo-app/target/surefire-reports/TEST-org.foo.app.AppComponentTest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<testsuite xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd\" version=\"3.0\" name=\"org.foo.app.AppComponentTest\" time=\"0.062\" tests=\"1\" errors=\"0\" skipped=\"0\" failures=\"0\">\r\n  <properties>\r\n    <property name=\"awt.toolkit\" value=\"sun.awt.X11.XToolkit\"/>\r\n    <property name=\"java.specification.version\" value=\"11\"/>\r\n    <property name=\"sun.cpu.isalist\" value=\"\"/>\r\n    <property name=\"sun.jnu.encoding\" value=\"UTF-8\"/>\r\n    <property name=\"java.class.path\" value=\"/root/onos/foo-app/target/test-classes:/root/onos/foo-app/target/classes:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0.jar:/root/.m2/repository/commons-configuration/commons-configuration/1.10/commons-configuration-1.10.jar:/root/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/root/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar:/root/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/root/.m2/repository/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.jar:/root/.m2/repository/commons-io/commons-io/2.6/commons-io-2.6.jar:/root/.m2/repository/commons-pool/commons-pool/1.6/commons-pool-1.6.jar:/root/.m2/repository/org/osgi/org.osgi.util.promise/1.1.0/org.osgi.util.promise-1.1.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.component/1.4.0/org.osgi.service.component-1.4.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.metatype.annotations/1.4.0/org.osgi.service.metatype.annotations-1.4.0.jar:/root/.m2/repository/org/apache/karaf/features/org.apache.karaf.features.core/4.2.2/org.apache.karaf.features.core-4.2.2.jar:/root/.m2/repository/org/ops4j/pax/url/pax-url-aether/2.5.4/pax-url-aether-2.5.4.jar:/root/.m2/repository/org/slf4j/jcl-over-slf4j/1.6.6/jcl-over-slf4j-1.6.6.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-property/1.5.0/ops4j-base-util-property-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-collections/1.5.0/ops4j-base-util-collections-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-lang/1.5.0/ops4j-base-lang-1.5.0.jar:/root/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-property/1.8.3/pax-swissbox-property-1.8.3.jar:/root/.m2/repository/javax/xml/bind/jaxb-api/2.3.0/jaxb-api-2.3.0.jar:/root/.m2/repository/javax/activation/activation/1.1.1/activation-1.1.1.jar:/root/.m2/repository/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.jar:/root/.m2/repository/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1.jar:/root/.m2/repository/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7.jar:/root/.m2/repository/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar:/root/.m2/repository/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar:/root/.m2/repository/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar:/root/.m2/repository/org/apache/karaf/system/org.apache.karaf.system.core/4.2.2/org.apache.karaf.system.core-4.2.2.jar:/root/.m2/repository/org/apache/karaf/org.apache.karaf.util/4.2.2/org.apache.karaf.util-4.2.2.jar:/root/.m2/repository/org/apache/felix/org.apache.felix.utils/1.11.2/org.apache.felix.utils-1.11.2.jar:/root/.m2/repository/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar:/root/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/root/.m2/repository/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1.jar:/root/.m2/repository/io/netty/netty-buffer/4.1.27.Final/netty-buffer-4.1.27.Final.jar:/root/.m2/repository/io/netty/netty-common/4.1.27.Final/netty-common-4.1.27.Final.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.9.5/jackson-annotations-2.9.5.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-core/3.2.2/metrics-core-3.2.2.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-json/3.2.2/metrics-json-3.2.2.jar:/root/.m2/repository/com/esotericsoftware/kryo/4.0.1/kryo-4.0.1.jar:/root/.m2/repository/com/esotericsoftware/reflectasm/1.11.7/reflectasm-1.11.7.jar:/root/.m2/repository/org/ow2/asm/asm/5.2/asm-5.2.jar:/root/.m2/repository/com/esotericsoftware/minlog/1.3.0/minlog-1.3.0.jar:/root/.m2/repository/org/objenesis/objenesis/2.6/objenesis-2.6.jar:/root/.m2/repository/org/onosproject/onlab-rest/2.0.0/onlab-rest-2.0.0.jar:/root/.m2/repository/javax/ws/rs/javax.ws.rs-api/2.1/javax.ws.rs-api-2.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-server/2.27/jersey-server-2.27.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-common/2.27/jersey-common-2.27.jar:/root/.m2/repository/org/glassfish/hk2/osgi-resource-locator/1.0.1/osgi-resource-locator-1.0.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-client/2.27/jersey-client-2.27.jar:/root/.m2/repository/org/glassfish/jersey/media/jersey-media-jaxb/2.27/jersey-media-jaxb-2.27.jar:/root/.m2/repository/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar:/root/.m2/repository/org/glassfish/hk2/external/javax.inject/2.5.0-b42/javax.inject-2.5.0-b42.jar:/root/.m2/repository/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar:/root/.m2/repository/org/glassfish/jersey/inject/jersey-hk2/2.27/jersey-hk2-2.27.jar:/root/.m2/repository/org/glassfish/hk2/hk2-locator/2.5.0-b42/hk2-locator-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/external/aopalliance-repackaged/2.5.0-b42/aopalliance-repackaged-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/hk2-api/2.5.0-b42/hk2-api-2.5.0-b42.jar:/root/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/root/.m2/repository/org/glassfish/hk2/hk2-utils/2.5.0-b42/hk2-utils-2.5.0-b42.jar:/root/.m2/repository/org/javassist/javassist/3.22.0-CR2/javassist-3.22.0-CR2.jar:/root/.m2/repository/joda-time/joda-time/2.9.3/joda-time-2.9.3.jar:/root/.m2/repository/io/netty/netty/3.10.5.Final/netty-3.10.5.Final.jar:/root/.m2/repository/org/onosproject/onlab-osgi/2.0.0/onlab-osgi-2.0.0.jar:/root/.m2/repository/org/onosproject/onlab-misc/2.0.0/onlab-misc-2.0.0.jar:/root/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:/root/.m2/repository/com/google/guava/guava/22.0/guava-22.0.jar:/root/.m2/repository/com/google/errorprone/error_prone_annotations/2.0.18/error_prone_annotations-2.0.18.jar:/root/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar:/root/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar:/root/.m2/repository/junit/junit/4.12/junit-4.12.jar:/root/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0-tests.jar:/root/.m2/repository/org/osgi/org.osgi.service.component.annotations/1.4.0/org.osgi.service.component.annotations-1.4.0.jar:/root/.m2/repository/org/onosproject/onos-cli/2.0.0/onos-cli-2.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.core/4.2.2/org.apache.karaf.shell.core-4.2.2.jar:/root/.m2/repository/org/onosproject/onos-core-common/2.0.0/onos-core-common-2.0.0.jar:/root/.m2/repository/org/osgi/org.osgi.core/5.0.0/org.osgi.core-5.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.console/4.2.1/org.apache.karaf.shell.console-4.2.1.jar:/root/.m2/repository/org/jline/jline/3.9.0/jline-3.9.0.jar:/root/.m2/repository/org/fusesource/jansi/jansi/1.17.1/jansi-1.17.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.modules/4.2.1/org.apache.karaf.jaas.modules-4.2.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.config/4.2.1/org.apache.karaf.jaas.config-4.2.1.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-core/2.2.11/jaxb-core-2.2.11.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-impl/2.2.11/jaxb-impl-2.2.11.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.boot/4.2.1/org.apache.karaf.jaas.boot-4.2.1.jar:/root/.m2/repository/org/apache/sshd/sshd-core/1.7.0/sshd-core-1.7.0.jar:\"/>\r\n    <property name=\"java.vm.vendor\" value=\"Azul Systems, Inc.\"/>\r\n    <property name=\"sun.arch.data.model\" value=\"64\"/>\r\n    <property name=\"java.vendor.url\" value=\"http://www.azul.com/\"/>\r\n    <property name=\"user.timezone\" value=\"\"/>\r\n    <property name=\"java.vm.specification.version\" value=\"11\"/>\r\n    <property name=\"os.name\" value=\"Linux\"/>\r\n    <property name=\"sun.java.launcher\" value=\"SUN_STANDARD\"/>\r\n    <property name=\"user.country\" value=\"US\"/>\r\n    <property name=\"sun.boot.library.path\" value=\"/usr/lib/jvm/zulu11-ca-amd64/lib\"/>\r\n    <property name=\"sun.java.command\" value=\"/root/onos/foo-app/target/surefire/surefirebooter-20240305161839685_3.jar /root/onos/foo-app/target/surefire 2024-03-05T16-18-39_630-jvmRun1 surefire-20240305161839685_1tmp surefire_0-20240305161839685_2tmp\"/>\r\n    <property name=\"jdk.debug\" value=\"release\"/>\r\n    <property name=\"surefire.test.class.path\" value=\"/root/onos/foo-app/target/test-classes:/root/onos/foo-app/target/classes:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0.jar:/root/.m2/repository/commons-configuration/commons-configuration/1.10/commons-configuration-1.10.jar:/root/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/root/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar:/root/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/root/.m2/repository/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.jar:/root/.m2/repository/commons-io/commons-io/2.6/commons-io-2.6.jar:/root/.m2/repository/commons-pool/commons-pool/1.6/commons-pool-1.6.jar:/root/.m2/repository/org/osgi/org.osgi.util.promise/1.1.0/org.osgi.util.promise-1.1.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.component/1.4.0/org.osgi.service.component-1.4.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.metatype.annotations/1.4.0/org.osgi.service.metatype.annotations-1.4.0.jar:/root/.m2/repository/org/apache/karaf/features/org.apache.karaf.features.core/4.2.2/org.apache.karaf.features.core-4.2.2.jar:/root/.m2/repository/org/ops4j/pax/url/pax-url-aether/2.5.4/pax-url-aether-2.5.4.jar:/root/.m2/repository/org/slf4j/jcl-over-slf4j/1.6.6/jcl-over-slf4j-1.6.6.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-property/1.5.0/ops4j-base-util-property-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-collections/1.5.0/ops4j-base-util-collections-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-lang/1.5.0/ops4j-base-lang-1.5.0.jar:/root/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-property/1.8.3/pax-swissbox-property-1.8.3.jar:/root/.m2/repository/javax/xml/bind/jaxb-api/2.3.0/jaxb-api-2.3.0.jar:/root/.m2/repository/javax/activation/activation/1.1.1/activation-1.1.1.jar:/root/.m2/repository/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.jar:/root/.m2/repository/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1.jar:/root/.m2/repository/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7.jar:/root/.m2/repository/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar:/root/.m2/repository/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar:/root/.m2/repository/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar:/root/.m2/repository/org/apache/karaf/system/org.apache.karaf.system.core/4.2.2/org.apache.karaf.system.core-4.2.2.jar:/root/.m2/repository/org/apache/karaf/org.apache.karaf.util/4.2.2/org.apache.karaf.util-4.2.2.jar:/root/.m2/repository/org/apache/felix/org.apache.felix.utils/1.11.2/org.apache.felix.utils-1.11.2.jar:/root/.m2/repository/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar:/root/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/root/.m2/repository/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1.jar:/root/.m2/repository/io/netty/netty-buffer/4.1.27.Final/netty-buffer-4.1.27.Final.jar:/root/.m2/repository/io/netty/netty-common/4.1.27.Final/netty-common-4.1.27.Final.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.9.5/jackson-annotations-2.9.5.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-core/3.2.2/metrics-core-3.2.2.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-json/3.2.2/metrics-json-3.2.2.jar:/root/.m2/repository/com/esotericsoftware/kryo/4.0.1/kryo-4.0.1.jar:/root/.m2/repository/com/esotericsoftware/reflectasm/1.11.7/reflectasm-1.11.7.jar:/root/.m2/repository/org/ow2/asm/asm/5.2/asm-5.2.jar:/root/.m2/repository/com/esotericsoftware/minlog/1.3.0/minlog-1.3.0.jar:/root/.m2/repository/org/objenesis/objenesis/2.6/objenesis-2.6.jar:/root/.m2/repository/org/onosproject/onlab-rest/2.0.0/onlab-rest-2.0.0.jar:/root/.m2/repository/javax/ws/rs/javax.ws.rs-api/2.1/javax.ws.rs-api-2.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-server/2.27/jersey-server-2.27.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-common/2.27/jersey-common-2.27.jar:/root/.m2/repository/org/glassfish/hk2/osgi-resource-locator/1.0.1/osgi-resource-locator-1.0.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-client/2.27/jersey-client-2.27.jar:/root/.m2/repository/org/glassfish/jersey/media/jersey-media-jaxb/2.27/jersey-media-jaxb-2.27.jar:/root/.m2/repository/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar:/root/.m2/repository/org/glassfish/hk2/external/javax.inject/2.5.0-b42/javax.inject-2.5.0-b42.jar:/root/.m2/repository/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar:/root/.m2/repository/org/glassfish/jersey/inject/jersey-hk2/2.27/jersey-hk2-2.27.jar:/root/.m2/repository/org/glassfish/hk2/hk2-locator/2.5.0-b42/hk2-locator-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/external/aopalliance-repackaged/2.5.0-b42/aopalliance-repackaged-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/hk2-api/2.5.0-b42/hk2-api-2.5.0-b42.jar:/root/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/root/.m2/repository/org/glassfish/hk2/hk2-utils/2.5.0-b42/hk2-utils-2.5.0-b42.jar:/root/.m2/repository/org/javassist/javassist/3.22.0-CR2/javassist-3.22.0-CR2.jar:/root/.m2/repository/joda-time/joda-time/2.9.3/joda-time-2.9.3.jar:/root/.m2/repository/io/netty/netty/3.10.5.Final/netty-3.10.5.Final.jar:/root/.m2/repository/org/onosproject/onlab-osgi/2.0.0/onlab-osgi-2.0.0.jar:/root/.m2/repository/org/onosproject/onlab-misc/2.0.0/onlab-misc-2.0.0.jar:/root/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:/root/.m2/repository/com/google/guava/guava/22.0/guava-22.0.jar:/root/.m2/repository/com/google/errorprone/error_prone_annotations/2.0.18/error_prone_annotations-2.0.18.jar:/root/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar:/root/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar:/root/.m2/repository/junit/junit/4.12/junit-4.12.jar:/root/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0-tests.jar:/root/.m2/repository/org/osgi/org.osgi.service.component.annotations/1.4.0/org.osgi.service.component.annotations-1.4.0.jar:/root/.m2/repository/org/onosproject/onos-cli/2.0.0/onos-cli-2.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.core/4.2.2/org.apache.karaf.shell.core-4.2.2.jar:/root/.m2/repository/org/onosproject/onos-core-common/2.0.0/onos-core-common-2.0.0.jar:/root/.m2/repository/org/osgi/org.osgi.core/5.0.0/org.osgi.core-5.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.console/4.2.1/org.apache.karaf.shell.console-4.2.1.jar:/root/.m2/repository/org/jline/jline/3.9.0/jline-3.9.0.jar:/root/.m2/repository/org/fusesource/jansi/jansi/1.17.1/jansi-1.17.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.modules/4.2.1/org.apache.karaf.jaas.modules-4.2.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.config/4.2.1/org.apache.karaf.jaas.config-4.2.1.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-core/2.2.11/jaxb-core-2.2.11.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-impl/2.2.11/jaxb-impl-2.2.11.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.boot/4.2.1/org.apache.karaf.jaas.boot-4.2.1.jar:/root/.m2/repository/org/apache/sshd/sshd-core/1.7.0/sshd-core-1.7.0.jar:\"/>\r\n    <property name=\"sun.cpu.endian\" value=\"little\"/>\r\n    <property name=\"user.home\" value=\"/root\"/>\r\n    <property name=\"user.language\" value=\"en\"/>\r\n    <property name=\"java.specification.vendor\" value=\"Oracle Corporation\"/>\r\n    <property name=\"java.version.date\" value=\"2021-10-19\"/>\r\n    <property name=\"java.home\" value=\"/usr/lib/jvm/zulu11-ca-amd64\"/>\r\n    <property name=\"file.separator\" value=\"/\"/>\r\n    <property name=\"basedir\" value=\"/root/onos/foo-app\"/>\r\n    <property name=\"java.vm.compressedOopsMode\" value=\"32-bit\"/>\r\n    <property name=\"line.separator\" value=\"&#10;\"/>\r\n    <property name=\"java.specification.name\" value=\"Java Platform API Specification\"/>\r\n    <property name=\"java.vm.specification.vendor\" value=\"Oracle Corporation\"/>\r\n    <property name=\"jdk.vendor.version\" value=\"Zulu11.52+13-CA\"/>\r\n    <property name=\"java.awt.graphicsenv\" value=\"sun.awt.X11GraphicsEnvironment\"/>\r\n    <property name=\"surefire.real.class.path\" value=\"/root/onos/foo-app/target/surefire/surefirebooter-20240305161839685_3.jar\"/>\r\n    <property name=\"sun.management.compiler\" value=\"HotSpot 64-Bit Tiered Compilers\"/>\r\n    <property name=\"java.runtime.version\" value=\"11.0.13+8-LTS\"/>\r\n    <property name=\"user.name\" value=\"root\"/>\r\n    <property name=\"path.separator\" value=\":\"/>\r\n    <property name=\"os.version\" value=\"6.6.9-amd64\"/>\r\n    <property name=\"java.runtime.name\" value=\"OpenJDK Runtime Environment\"/>\r\n    <property name=\"file.encoding\" value=\"UTF-8\"/>\r\n    <property name=\"java.vm.name\" value=\"OpenJDK 64-Bit Server VM\"/>\r\n    <property name=\"java.vendor.version\" value=\"Zulu11.52+13-CA\"/>\r\n    <property name=\"localRepository\" value=\"/root/.m2/repository\"/>\r\n    <property name=\"java.vendor.url.bug\" value=\"http://www.azul.com/support/\"/>\r\n    <property name=\"java.io.tmpdir\" value=\"/tmp\"/>\r\n    <property name=\"java.version\" value=\"11.0.13\"/>\r\n    <property name=\"user.dir\" value=\"/root/onos/foo-app\"/>\r\n    <property name=\"os.arch\" value=\"amd64\"/>\r\n    <property name=\"java.vm.specification.name\" value=\"Java Virtual Machine Specification\"/>\r\n    <property name=\"java.awt.printerjob\" value=\"sun.print.PSPrinterJob\"/>\r\n    <property name=\"sun.os.patch.level\" value=\"unknown\"/>\r\n    <property name=\"java.library.path\" value=\"/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib\"/>\r\n    <property name=\"java.vm.info\" value=\"mixed mode\"/>\r\n    <property name=\"java.vendor\" value=\"Azul Systems, Inc.\"/>\r\n    <property name=\"java.vm.version\" value=\"11.0.13+8-LTS\"/>\r\n    <property name=\"sun.io.unicode.encoding\" value=\"UnicodeLittle\"/>\r\n    <property name=\"java.class.version\" value=\"55.0\"/>\r\n  </properties>\r\n  <testcase name=\"basics\" classname=\"org.foo.app.AppComponentTest\" time=\"0.019\">\r\n    <system-err><![CDATA[SLF4J: Failed to load class \"org.slf4j.impl.StaticLoggerBinder\".\r\nSLF4J: Defaulting to no-operation (NOP) logger implementation\r\nSLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.\r\n]]></system-err>\r\n  </testcase>\r\n</testsuite>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/foo-app/target/surefire-reports/TEST-org.foo.app.AppComponentTest.xml b/foo-app/target/surefire-reports/TEST-org.foo.app.AppComponentTest.xml
+--- a/foo-app/target/surefire-reports/TEST-org.foo.app.AppComponentTest.xml	(revision 3f2d9e6b374db8ed72aba096f0ebd100386dc9b8)
++++ b/foo-app/target/surefire-reports/TEST-org.foo.app.AppComponentTest.xml	(date 1709658716506)
+@@ -1,64 +1,57 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.foo.app.AppComponentTest" time="0.062" tests="1" errors="0" skipped="0" failures="0">
++<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.foo.app.AppComponentTest" time="0.32" tests="1" errors="0" skipped="0" failures="0">
+   <properties>
+-    <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
+-    <property name="java.specification.version" value="11"/>
+-    <property name="sun.cpu.isalist" value=""/>
++    <property name="java.specification.version" value="17"/>
+     <property name="sun.jnu.encoding" value="UTF-8"/>
+-    <property name="java.class.path" value="/root/onos/foo-app/target/test-classes:/root/onos/foo-app/target/classes:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0.jar:/root/.m2/repository/commons-configuration/commons-configuration/1.10/commons-configuration-1.10.jar:/root/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/root/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar:/root/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/root/.m2/repository/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.jar:/root/.m2/repository/commons-io/commons-io/2.6/commons-io-2.6.jar:/root/.m2/repository/commons-pool/commons-pool/1.6/commons-pool-1.6.jar:/root/.m2/repository/org/osgi/org.osgi.util.promise/1.1.0/org.osgi.util.promise-1.1.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.component/1.4.0/org.osgi.service.component-1.4.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.metatype.annotations/1.4.0/org.osgi.service.metatype.annotations-1.4.0.jar:/root/.m2/repository/org/apache/karaf/features/org.apache.karaf.features.core/4.2.2/org.apache.karaf.features.core-4.2.2.jar:/root/.m2/repository/org/ops4j/pax/url/pax-url-aether/2.5.4/pax-url-aether-2.5.4.jar:/root/.m2/repository/org/slf4j/jcl-over-slf4j/1.6.6/jcl-over-slf4j-1.6.6.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-property/1.5.0/ops4j-base-util-property-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-collections/1.5.0/ops4j-base-util-collections-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-lang/1.5.0/ops4j-base-lang-1.5.0.jar:/root/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-property/1.8.3/pax-swissbox-property-1.8.3.jar:/root/.m2/repository/javax/xml/bind/jaxb-api/2.3.0/jaxb-api-2.3.0.jar:/root/.m2/repository/javax/activation/activation/1.1.1/activation-1.1.1.jar:/root/.m2/repository/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.jar:/root/.m2/repository/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1.jar:/root/.m2/repository/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7.jar:/root/.m2/repository/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar:/root/.m2/repository/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar:/root/.m2/repository/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar:/root/.m2/repository/org/apache/karaf/system/org.apache.karaf.system.core/4.2.2/org.apache.karaf.system.core-4.2.2.jar:/root/.m2/repository/org/apache/karaf/org.apache.karaf.util/4.2.2/org.apache.karaf.util-4.2.2.jar:/root/.m2/repository/org/apache/felix/org.apache.felix.utils/1.11.2/org.apache.felix.utils-1.11.2.jar:/root/.m2/repository/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar:/root/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/root/.m2/repository/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1.jar:/root/.m2/repository/io/netty/netty-buffer/4.1.27.Final/netty-buffer-4.1.27.Final.jar:/root/.m2/repository/io/netty/netty-common/4.1.27.Final/netty-common-4.1.27.Final.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.9.5/jackson-annotations-2.9.5.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-core/3.2.2/metrics-core-3.2.2.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-json/3.2.2/metrics-json-3.2.2.jar:/root/.m2/repository/com/esotericsoftware/kryo/4.0.1/kryo-4.0.1.jar:/root/.m2/repository/com/esotericsoftware/reflectasm/1.11.7/reflectasm-1.11.7.jar:/root/.m2/repository/org/ow2/asm/asm/5.2/asm-5.2.jar:/root/.m2/repository/com/esotericsoftware/minlog/1.3.0/minlog-1.3.0.jar:/root/.m2/repository/org/objenesis/objenesis/2.6/objenesis-2.6.jar:/root/.m2/repository/org/onosproject/onlab-rest/2.0.0/onlab-rest-2.0.0.jar:/root/.m2/repository/javax/ws/rs/javax.ws.rs-api/2.1/javax.ws.rs-api-2.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-server/2.27/jersey-server-2.27.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-common/2.27/jersey-common-2.27.jar:/root/.m2/repository/org/glassfish/hk2/osgi-resource-locator/1.0.1/osgi-resource-locator-1.0.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-client/2.27/jersey-client-2.27.jar:/root/.m2/repository/org/glassfish/jersey/media/jersey-media-jaxb/2.27/jersey-media-jaxb-2.27.jar:/root/.m2/repository/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar:/root/.m2/repository/org/glassfish/hk2/external/javax.inject/2.5.0-b42/javax.inject-2.5.0-b42.jar:/root/.m2/repository/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar:/root/.m2/repository/org/glassfish/jersey/inject/jersey-hk2/2.27/jersey-hk2-2.27.jar:/root/.m2/repository/org/glassfish/hk2/hk2-locator/2.5.0-b42/hk2-locator-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/external/aopalliance-repackaged/2.5.0-b42/aopalliance-repackaged-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/hk2-api/2.5.0-b42/hk2-api-2.5.0-b42.jar:/root/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/root/.m2/repository/org/glassfish/hk2/hk2-utils/2.5.0-b42/hk2-utils-2.5.0-b42.jar:/root/.m2/repository/org/javassist/javassist/3.22.0-CR2/javassist-3.22.0-CR2.jar:/root/.m2/repository/joda-time/joda-time/2.9.3/joda-time-2.9.3.jar:/root/.m2/repository/io/netty/netty/3.10.5.Final/netty-3.10.5.Final.jar:/root/.m2/repository/org/onosproject/onlab-osgi/2.0.0/onlab-osgi-2.0.0.jar:/root/.m2/repository/org/onosproject/onlab-misc/2.0.0/onlab-misc-2.0.0.jar:/root/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:/root/.m2/repository/com/google/guava/guava/22.0/guava-22.0.jar:/root/.m2/repository/com/google/errorprone/error_prone_annotations/2.0.18/error_prone_annotations-2.0.18.jar:/root/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar:/root/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar:/root/.m2/repository/junit/junit/4.12/junit-4.12.jar:/root/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0-tests.jar:/root/.m2/repository/org/osgi/org.osgi.service.component.annotations/1.4.0/org.osgi.service.component.annotations-1.4.0.jar:/root/.m2/repository/org/onosproject/onos-cli/2.0.0/onos-cli-2.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.core/4.2.2/org.apache.karaf.shell.core-4.2.2.jar:/root/.m2/repository/org/onosproject/onos-core-common/2.0.0/onos-core-common-2.0.0.jar:/root/.m2/repository/org/osgi/org.osgi.core/5.0.0/org.osgi.core-5.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.console/4.2.1/org.apache.karaf.shell.console-4.2.1.jar:/root/.m2/repository/org/jline/jline/3.9.0/jline-3.9.0.jar:/root/.m2/repository/org/fusesource/jansi/jansi/1.17.1/jansi-1.17.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.modules/4.2.1/org.apache.karaf.jaas.modules-4.2.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.config/4.2.1/org.apache.karaf.jaas.config-4.2.1.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-core/2.2.11/jaxb-core-2.2.11.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-impl/2.2.11/jaxb-impl-2.2.11.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.boot/4.2.1/org.apache.karaf.jaas.boot-4.2.1.jar:/root/.m2/repository/org/apache/sshd/sshd-core/1.7.0/sshd-core-1.7.0.jar:"/>
+-    <property name="java.vm.vendor" value="Azul Systems, Inc."/>
++    <property name="java.class.path" value="/media/sf_Investigao/MTD-ONOS-APP/foo-app/target/test-classes:/media/sf_Investigao/MTD-ONOS-APP/foo-app/target/classes:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0.jar:/root/.m2/repository/commons-configuration/commons-configuration/1.10/commons-configuration-1.10.jar:/root/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/root/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar:/root/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/root/.m2/repository/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.jar:/root/.m2/repository/commons-io/commons-io/2.6/commons-io-2.6.jar:/root/.m2/repository/commons-pool/commons-pool/1.6/commons-pool-1.6.jar:/root/.m2/repository/org/osgi/org.osgi.util.promise/1.1.0/org.osgi.util.promise-1.1.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.component/1.4.0/org.osgi.service.component-1.4.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.metatype.annotations/1.4.0/org.osgi.service.metatype.annotations-1.4.0.jar:/root/.m2/repository/org/apache/karaf/features/org.apache.karaf.features.core/4.2.2/org.apache.karaf.features.core-4.2.2.jar:/root/.m2/repository/org/ops4j/pax/url/pax-url-aether/2.5.4/pax-url-aether-2.5.4.jar:/root/.m2/repository/org/slf4j/jcl-over-slf4j/1.6.6/jcl-over-slf4j-1.6.6.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-property/1.5.0/ops4j-base-util-property-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-collections/1.5.0/ops4j-base-util-collections-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-lang/1.5.0/ops4j-base-lang-1.5.0.jar:/root/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-property/1.8.3/pax-swissbox-property-1.8.3.jar:/root/.m2/repository/javax/xml/bind/jaxb-api/2.3.0/jaxb-api-2.3.0.jar:/root/.m2/repository/javax/activation/activation/1.1.1/activation-1.1.1.jar:/root/.m2/repository/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.jar:/root/.m2/repository/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1.jar:/root/.m2/repository/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7.jar:/root/.m2/repository/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar:/root/.m2/repository/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar:/root/.m2/repository/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar:/root/.m2/repository/org/apache/karaf/system/org.apache.karaf.system.core/4.2.2/org.apache.karaf.system.core-4.2.2.jar:/root/.m2/repository/org/apache/karaf/org.apache.karaf.util/4.2.2/org.apache.karaf.util-4.2.2.jar:/root/.m2/repository/org/apache/felix/org.apache.felix.utils/1.11.2/org.apache.felix.utils-1.11.2.jar:/root/.m2/repository/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar:/root/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/root/.m2/repository/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1.jar:/root/.m2/repository/io/netty/netty-buffer/4.1.27.Final/netty-buffer-4.1.27.Final.jar:/root/.m2/repository/io/netty/netty-common/4.1.27.Final/netty-common-4.1.27.Final.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.9.5/jackson-annotations-2.9.5.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-core/3.2.2/metrics-core-3.2.2.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-json/3.2.2/metrics-json-3.2.2.jar:/root/.m2/repository/com/esotericsoftware/kryo/4.0.1/kryo-4.0.1.jar:/root/.m2/repository/com/esotericsoftware/reflectasm/1.11.7/reflectasm-1.11.7.jar:/root/.m2/repository/org/ow2/asm/asm/5.2/asm-5.2.jar:/root/.m2/repository/com/esotericsoftware/minlog/1.3.0/minlog-1.3.0.jar:/root/.m2/repository/org/objenesis/objenesis/2.6/objenesis-2.6.jar:/root/.m2/repository/org/onosproject/onlab-rest/2.0.0/onlab-rest-2.0.0.jar:/root/.m2/repository/javax/ws/rs/javax.ws.rs-api/2.1/javax.ws.rs-api-2.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-server/2.27/jersey-server-2.27.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-common/2.27/jersey-common-2.27.jar:/root/.m2/repository/org/glassfish/hk2/osgi-resource-locator/1.0.1/osgi-resource-locator-1.0.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-client/2.27/jersey-client-2.27.jar:/root/.m2/repository/org/glassfish/jersey/media/jersey-media-jaxb/2.27/jersey-media-jaxb-2.27.jar:/root/.m2/repository/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar:/root/.m2/repository/org/glassfish/hk2/external/javax.inject/2.5.0-b42/javax.inject-2.5.0-b42.jar:/root/.m2/repository/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar:/root/.m2/repository/org/glassfish/jersey/inject/jersey-hk2/2.27/jersey-hk2-2.27.jar:/root/.m2/repository/org/glassfish/hk2/hk2-locator/2.5.0-b42/hk2-locator-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/external/aopalliance-repackaged/2.5.0-b42/aopalliance-repackaged-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/hk2-api/2.5.0-b42/hk2-api-2.5.0-b42.jar:/root/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/root/.m2/repository/org/glassfish/hk2/hk2-utils/2.5.0-b42/hk2-utils-2.5.0-b42.jar:/root/.m2/repository/org/javassist/javassist/3.22.0-CR2/javassist-3.22.0-CR2.jar:/root/.m2/repository/joda-time/joda-time/2.9.3/joda-time-2.9.3.jar:/root/.m2/repository/io/netty/netty/3.10.5.Final/netty-3.10.5.Final.jar:/root/.m2/repository/org/onosproject/onlab-osgi/2.0.0/onlab-osgi-2.0.0.jar:/root/.m2/repository/org/onosproject/onlab-misc/2.0.0/onlab-misc-2.0.0.jar:/root/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:/root/.m2/repository/com/google/guava/guava/22.0/guava-22.0.jar:/root/.m2/repository/com/google/errorprone/error_prone_annotations/2.0.18/error_prone_annotations-2.0.18.jar:/root/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar:/root/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar:/root/.m2/repository/junit/junit/4.12/junit-4.12.jar:/root/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0-tests.jar:/root/.m2/repository/org/osgi/org.osgi.service.component.annotations/1.4.0/org.osgi.service.component.annotations-1.4.0.jar:/root/.m2/repository/org/onosproject/onos-cli/2.0.0/onos-cli-2.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.core/4.2.2/org.apache.karaf.shell.core-4.2.2.jar:/root/.m2/repository/org/onosproject/onos-core-common/2.0.0/onos-core-common-2.0.0.jar:/root/.m2/repository/org/osgi/org.osgi.core/5.0.0/org.osgi.core-5.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.console/4.2.1/org.apache.karaf.shell.console-4.2.1.jar:/root/.m2/repository/org/jline/jline/3.9.0/jline-3.9.0.jar:/root/.m2/repository/org/fusesource/jansi/jansi/1.17.1/jansi-1.17.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.modules/4.2.1/org.apache.karaf.jaas.modules-4.2.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.config/4.2.1/org.apache.karaf.jaas.config-4.2.1.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-core/2.2.11/jaxb-core-2.2.11.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-impl/2.2.11/jaxb-impl-2.2.11.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.boot/4.2.1/org.apache.karaf.jaas.boot-4.2.1.jar:/root/.m2/repository/org/apache/sshd/sshd-core/1.7.0/sshd-core-1.7.0.jar:"/>
++    <property name="java.vm.vendor" value="Debian"/>
+     <property name="sun.arch.data.model" value="64"/>
+-    <property name="java.vendor.url" value="http://www.azul.com/"/>
+-    <property name="user.timezone" value=""/>
+-    <property name="java.vm.specification.version" value="11"/>
++    <property name="java.vendor.url" value="https://tracker.debian.org/openjdk-17"/>
+     <property name="os.name" value="Linux"/>
++    <property name="java.vm.specification.version" value="17"/>
+     <property name="sun.java.launcher" value="SUN_STANDARD"/>
+     <property name="user.country" value="US"/>
+-    <property name="sun.boot.library.path" value="/usr/lib/jvm/zulu11-ca-amd64/lib"/>
+-    <property name="sun.java.command" value="/root/onos/foo-app/target/surefire/surefirebooter-20240305161839685_3.jar /root/onos/foo-app/target/surefire 2024-03-05T16-18-39_630-jvmRun1 surefire-20240305161839685_1tmp surefire_0-20240305161839685_2tmp"/>
++    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk-amd64/lib"/>
++    <property name="sun.java.command" value="/media/sf_Investigao/MTD-ONOS-APP/foo-app/target/surefire/surefirebooter-20240305121151250_3.jar /media/sf_Investigao/MTD-ONOS-APP/foo-app/target/surefire 2024-03-05T12-11-50_978-jvmRun1 surefire-20240305121151250_1tmp surefire_0-20240305121151250_2tmp"/>
+     <property name="jdk.debug" value="release"/>
+-    <property name="surefire.test.class.path" value="/root/onos/foo-app/target/test-classes:/root/onos/foo-app/target/classes:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0.jar:/root/.m2/repository/commons-configuration/commons-configuration/1.10/commons-configuration-1.10.jar:/root/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/root/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar:/root/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/root/.m2/repository/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.jar:/root/.m2/repository/commons-io/commons-io/2.6/commons-io-2.6.jar:/root/.m2/repository/commons-pool/commons-pool/1.6/commons-pool-1.6.jar:/root/.m2/repository/org/osgi/org.osgi.util.promise/1.1.0/org.osgi.util.promise-1.1.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.component/1.4.0/org.osgi.service.component-1.4.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.metatype.annotations/1.4.0/org.osgi.service.metatype.annotations-1.4.0.jar:/root/.m2/repository/org/apache/karaf/features/org.apache.karaf.features.core/4.2.2/org.apache.karaf.features.core-4.2.2.jar:/root/.m2/repository/org/ops4j/pax/url/pax-url-aether/2.5.4/pax-url-aether-2.5.4.jar:/root/.m2/repository/org/slf4j/jcl-over-slf4j/1.6.6/jcl-over-slf4j-1.6.6.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-property/1.5.0/ops4j-base-util-property-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-collections/1.5.0/ops4j-base-util-collections-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-lang/1.5.0/ops4j-base-lang-1.5.0.jar:/root/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-property/1.8.3/pax-swissbox-property-1.8.3.jar:/root/.m2/repository/javax/xml/bind/jaxb-api/2.3.0/jaxb-api-2.3.0.jar:/root/.m2/repository/javax/activation/activation/1.1.1/activation-1.1.1.jar:/root/.m2/repository/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.jar:/root/.m2/repository/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1.jar:/root/.m2/repository/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7.jar:/root/.m2/repository/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar:/root/.m2/repository/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar:/root/.m2/repository/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar:/root/.m2/repository/org/apache/karaf/system/org.apache.karaf.system.core/4.2.2/org.apache.karaf.system.core-4.2.2.jar:/root/.m2/repository/org/apache/karaf/org.apache.karaf.util/4.2.2/org.apache.karaf.util-4.2.2.jar:/root/.m2/repository/org/apache/felix/org.apache.felix.utils/1.11.2/org.apache.felix.utils-1.11.2.jar:/root/.m2/repository/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar:/root/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/root/.m2/repository/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1.jar:/root/.m2/repository/io/netty/netty-buffer/4.1.27.Final/netty-buffer-4.1.27.Final.jar:/root/.m2/repository/io/netty/netty-common/4.1.27.Final/netty-common-4.1.27.Final.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.9.5/jackson-annotations-2.9.5.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-core/3.2.2/metrics-core-3.2.2.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-json/3.2.2/metrics-json-3.2.2.jar:/root/.m2/repository/com/esotericsoftware/kryo/4.0.1/kryo-4.0.1.jar:/root/.m2/repository/com/esotericsoftware/reflectasm/1.11.7/reflectasm-1.11.7.jar:/root/.m2/repository/org/ow2/asm/asm/5.2/asm-5.2.jar:/root/.m2/repository/com/esotericsoftware/minlog/1.3.0/minlog-1.3.0.jar:/root/.m2/repository/org/objenesis/objenesis/2.6/objenesis-2.6.jar:/root/.m2/repository/org/onosproject/onlab-rest/2.0.0/onlab-rest-2.0.0.jar:/root/.m2/repository/javax/ws/rs/javax.ws.rs-api/2.1/javax.ws.rs-api-2.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-server/2.27/jersey-server-2.27.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-common/2.27/jersey-common-2.27.jar:/root/.m2/repository/org/glassfish/hk2/osgi-resource-locator/1.0.1/osgi-resource-locator-1.0.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-client/2.27/jersey-client-2.27.jar:/root/.m2/repository/org/glassfish/jersey/media/jersey-media-jaxb/2.27/jersey-media-jaxb-2.27.jar:/root/.m2/repository/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar:/root/.m2/repository/org/glassfish/hk2/external/javax.inject/2.5.0-b42/javax.inject-2.5.0-b42.jar:/root/.m2/repository/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar:/root/.m2/repository/org/glassfish/jersey/inject/jersey-hk2/2.27/jersey-hk2-2.27.jar:/root/.m2/repository/org/glassfish/hk2/hk2-locator/2.5.0-b42/hk2-locator-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/external/aopalliance-repackaged/2.5.0-b42/aopalliance-repackaged-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/hk2-api/2.5.0-b42/hk2-api-2.5.0-b42.jar:/root/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/root/.m2/repository/org/glassfish/hk2/hk2-utils/2.5.0-b42/hk2-utils-2.5.0-b42.jar:/root/.m2/repository/org/javassist/javassist/3.22.0-CR2/javassist-3.22.0-CR2.jar:/root/.m2/repository/joda-time/joda-time/2.9.3/joda-time-2.9.3.jar:/root/.m2/repository/io/netty/netty/3.10.5.Final/netty-3.10.5.Final.jar:/root/.m2/repository/org/onosproject/onlab-osgi/2.0.0/onlab-osgi-2.0.0.jar:/root/.m2/repository/org/onosproject/onlab-misc/2.0.0/onlab-misc-2.0.0.jar:/root/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:/root/.m2/repository/com/google/guava/guava/22.0/guava-22.0.jar:/root/.m2/repository/com/google/errorprone/error_prone_annotations/2.0.18/error_prone_annotations-2.0.18.jar:/root/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar:/root/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar:/root/.m2/repository/junit/junit/4.12/junit-4.12.jar:/root/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0-tests.jar:/root/.m2/repository/org/osgi/org.osgi.service.component.annotations/1.4.0/org.osgi.service.component.annotations-1.4.0.jar:/root/.m2/repository/org/onosproject/onos-cli/2.0.0/onos-cli-2.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.core/4.2.2/org.apache.karaf.shell.core-4.2.2.jar:/root/.m2/repository/org/onosproject/onos-core-common/2.0.0/onos-core-common-2.0.0.jar:/root/.m2/repository/org/osgi/org.osgi.core/5.0.0/org.osgi.core-5.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.console/4.2.1/org.apache.karaf.shell.console-4.2.1.jar:/root/.m2/repository/org/jline/jline/3.9.0/jline-3.9.0.jar:/root/.m2/repository/org/fusesource/jansi/jansi/1.17.1/jansi-1.17.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.modules/4.2.1/org.apache.karaf.jaas.modules-4.2.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.config/4.2.1/org.apache.karaf.jaas.config-4.2.1.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-core/2.2.11/jaxb-core-2.2.11.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-impl/2.2.11/jaxb-impl-2.2.11.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.boot/4.2.1/org.apache.karaf.jaas.boot-4.2.1.jar:/root/.m2/repository/org/apache/sshd/sshd-core/1.7.0/sshd-core-1.7.0.jar:"/>
++    <property name="surefire.test.class.path" value="/media/sf_Investigao/MTD-ONOS-APP/foo-app/target/test-classes:/media/sf_Investigao/MTD-ONOS-APP/foo-app/target/classes:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0.jar:/root/.m2/repository/commons-configuration/commons-configuration/1.10/commons-configuration-1.10.jar:/root/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/root/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar:/root/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar:/root/.m2/repository/org/apache/commons/commons-lang3/3.7/commons-lang3-3.7.jar:/root/.m2/repository/commons-io/commons-io/2.6/commons-io-2.6.jar:/root/.m2/repository/commons-pool/commons-pool/1.6/commons-pool-1.6.jar:/root/.m2/repository/org/osgi/org.osgi.util.promise/1.1.0/org.osgi.util.promise-1.1.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.component/1.4.0/org.osgi.service.component-1.4.0.jar:/root/.m2/repository/org/osgi/org.osgi.service.metatype.annotations/1.4.0/org.osgi.service.metatype.annotations-1.4.0.jar:/root/.m2/repository/org/apache/karaf/features/org.apache.karaf.features.core/4.2.2/org.apache.karaf.features.core-4.2.2.jar:/root/.m2/repository/org/ops4j/pax/url/pax-url-aether/2.5.4/pax-url-aether-2.5.4.jar:/root/.m2/repository/org/slf4j/jcl-over-slf4j/1.6.6/jcl-over-slf4j-1.6.6.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-property/1.5.0/ops4j-base-util-property-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-util-collections/1.5.0/ops4j-base-util-collections-1.5.0.jar:/root/.m2/repository/org/ops4j/base/ops4j-base-lang/1.5.0/ops4j-base-lang-1.5.0.jar:/root/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-property/1.8.3/pax-swissbox-property-1.8.3.jar:/root/.m2/repository/javax/xml/bind/jaxb-api/2.3.0/jaxb-api-2.3.0.jar:/root/.m2/repository/javax/activation/activation/1.1.1/activation-1.1.1.jar:/root/.m2/repository/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.jar:/root/.m2/repository/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1.jar:/root/.m2/repository/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7.jar:/root/.m2/repository/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar:/root/.m2/repository/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar:/root/.m2/repository/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar:/root/.m2/repository/org/apache/karaf/system/org.apache.karaf.system.core/4.2.2/org.apache.karaf.system.core-4.2.2.jar:/root/.m2/repository/org/apache/karaf/org.apache.karaf.util/4.2.2/org.apache.karaf.util-4.2.2.jar:/root/.m2/repository/org/apache/felix/org.apache.felix.utils/1.11.2/org.apache.felix.utils-1.11.2.jar:/root/.m2/repository/org/apache/servicemix/bundles/org.apache.servicemix.bundles.dom4j/1.6.1_5/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar:/root/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar:/root/.m2/repository/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1.jar:/root/.m2/repository/io/netty/netty-buffer/4.1.27.Final/netty-buffer-4.1.27.Final.jar:/root/.m2/repository/io/netty/netty-common/4.1.27.Final/netty-common-4.1.27.Final.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.9.5/jackson-annotations-2.9.5.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-core/3.2.2/metrics-core-3.2.2.jar:/root/.m2/repository/io/dropwizard/metrics/metrics-json/3.2.2/metrics-json-3.2.2.jar:/root/.m2/repository/com/esotericsoftware/kryo/4.0.1/kryo-4.0.1.jar:/root/.m2/repository/com/esotericsoftware/reflectasm/1.11.7/reflectasm-1.11.7.jar:/root/.m2/repository/org/ow2/asm/asm/5.2/asm-5.2.jar:/root/.m2/repository/com/esotericsoftware/minlog/1.3.0/minlog-1.3.0.jar:/root/.m2/repository/org/objenesis/objenesis/2.6/objenesis-2.6.jar:/root/.m2/repository/org/onosproject/onlab-rest/2.0.0/onlab-rest-2.0.0.jar:/root/.m2/repository/javax/ws/rs/javax.ws.rs-api/2.1/javax.ws.rs-api-2.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-server/2.27/jersey-server-2.27.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-common/2.27/jersey-common-2.27.jar:/root/.m2/repository/org/glassfish/hk2/osgi-resource-locator/1.0.1/osgi-resource-locator-1.0.1.jar:/root/.m2/repository/org/glassfish/jersey/core/jersey-client/2.27/jersey-client-2.27.jar:/root/.m2/repository/org/glassfish/jersey/media/jersey-media-jaxb/2.27/jersey-media-jaxb-2.27.jar:/root/.m2/repository/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar:/root/.m2/repository/org/glassfish/hk2/external/javax.inject/2.5.0-b42/javax.inject-2.5.0-b42.jar:/root/.m2/repository/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar:/root/.m2/repository/org/glassfish/jersey/inject/jersey-hk2/2.27/jersey-hk2-2.27.jar:/root/.m2/repository/org/glassfish/hk2/hk2-locator/2.5.0-b42/hk2-locator-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/external/aopalliance-repackaged/2.5.0-b42/aopalliance-repackaged-2.5.0-b42.jar:/root/.m2/repository/org/glassfish/hk2/hk2-api/2.5.0-b42/hk2-api-2.5.0-b42.jar:/root/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/root/.m2/repository/org/glassfish/hk2/hk2-utils/2.5.0-b42/hk2-utils-2.5.0-b42.jar:/root/.m2/repository/org/javassist/javassist/3.22.0-CR2/javassist-3.22.0-CR2.jar:/root/.m2/repository/joda-time/joda-time/2.9.3/joda-time-2.9.3.jar:/root/.m2/repository/io/netty/netty/3.10.5.Final/netty-3.10.5.Final.jar:/root/.m2/repository/org/onosproject/onlab-osgi/2.0.0/onlab-osgi-2.0.0.jar:/root/.m2/repository/org/onosproject/onlab-misc/2.0.0/onlab-misc-2.0.0.jar:/root/.m2/repository/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:/root/.m2/repository/com/google/guava/guava/22.0/guava-22.0.jar:/root/.m2/repository/com/google/errorprone/error_prone_annotations/2.0.18/error_prone_annotations-2.0.18.jar:/root/.m2/repository/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar:/root/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar:/root/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar:/root/.m2/repository/junit/junit/4.12/junit-4.12.jar:/root/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/root/.m2/repository/org/onosproject/onos-api/2.0.0/onos-api-2.0.0-tests.jar:/root/.m2/repository/org/osgi/org.osgi.service.component.annotations/1.4.0/org.osgi.service.component.annotations-1.4.0.jar:/root/.m2/repository/org/onosproject/onos-cli/2.0.0/onos-cli-2.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.core/4.2.2/org.apache.karaf.shell.core-4.2.2.jar:/root/.m2/repository/org/onosproject/onos-core-common/2.0.0/onos-core-common-2.0.0.jar:/root/.m2/repository/org/osgi/org.osgi.core/5.0.0/org.osgi.core-5.0.0.jar:/root/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.console/4.2.1/org.apache.karaf.shell.console-4.2.1.jar:/root/.m2/repository/org/jline/jline/3.9.0/jline-3.9.0.jar:/root/.m2/repository/org/fusesource/jansi/jansi/1.17.1/jansi-1.17.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.modules/4.2.1/org.apache.karaf.jaas.modules-4.2.1.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.config/4.2.1/org.apache.karaf.jaas.config-4.2.1.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-core/2.2.11/jaxb-core-2.2.11.jar:/root/.m2/repository/com/sun/xml/bind/jaxb-impl/2.2.11/jaxb-impl-2.2.11.jar:/root/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.boot/4.2.1/org.apache.karaf.jaas.boot-4.2.1.jar:/root/.m2/repository/org/apache/sshd/sshd-core/1.7.0/sshd-core-1.7.0.jar:"/>
+     <property name="sun.cpu.endian" value="little"/>
+     <property name="user.home" value="/root"/>
+     <property name="user.language" value="en"/>
+     <property name="java.specification.vendor" value="Oracle Corporation"/>
+-    <property name="java.version.date" value="2021-10-19"/>
+-    <property name="java.home" value="/usr/lib/jvm/zulu11-ca-amd64"/>
++    <property name="java.version.date" value="2024-01-16"/>
++    <property name="java.home" value="/usr/lib/jvm/java-17-openjdk-amd64"/>
+     <property name="file.separator" value="/"/>
+-    <property name="basedir" value="/root/onos/foo-app"/>
++    <property name="basedir" value="/media/sf_Investigao/MTD-ONOS-APP/foo-app"/>
+     <property name="java.vm.compressedOopsMode" value="32-bit"/>
+     <property name="line.separator" value="&#10;"/>
+-    <property name="java.specification.name" value="Java Platform API Specification"/>
+     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+-    <property name="jdk.vendor.version" value="Zulu11.52+13-CA"/>
+-    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+-    <property name="surefire.real.class.path" value="/root/onos/foo-app/target/surefire/surefirebooter-20240305161839685_3.jar"/>
++    <property name="java.specification.name" value="Java Platform API Specification"/>
++    <property name="surefire.real.class.path" value="/media/sf_Investigao/MTD-ONOS-APP/foo-app/target/surefire/surefirebooter-20240305121151250_3.jar"/>
+     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+-    <property name="java.runtime.version" value="11.0.13+8-LTS"/>
++    <property name="java.runtime.version" value="17.0.10+7-Debian-1"/>
+     <property name="user.name" value="root"/>
+     <property name="path.separator" value=":"/>
+     <property name="os.version" value="6.6.9-amd64"/>
+     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+     <property name="file.encoding" value="UTF-8"/>
+     <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+-    <property name="java.vendor.version" value="Zulu11.52+13-CA"/>
+     <property name="localRepository" value="/root/.m2/repository"/>
+-    <property name="java.vendor.url.bug" value="http://www.azul.com/support/"/>
++    <property name="java.vendor.url.bug" value="https://bugs.debian.org/openjdk-17"/>
+     <property name="java.io.tmpdir" value="/tmp"/>
+-    <property name="java.version" value="11.0.13"/>
+-    <property name="user.dir" value="/root/onos/foo-app"/>
++    <property name="java.version" value="17.0.10"/>
++    <property name="user.dir" value="/media/sf_Investigao/MTD-ONOS-APP/foo-app"/>
+     <property name="os.arch" value="amd64"/>
+     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+-    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+-    <property name="sun.os.patch.level" value="unknown"/>
+-    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+-    <property name="java.vm.info" value="mixed mode"/>
+-    <property name="java.vendor" value="Azul Systems, Inc."/>
+-    <property name="java.vm.version" value="11.0.13+8-LTS"/>
++    <property name="native.encoding" value="UTF-8"/>
++    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
++    <property name="java.vm.info" value="mixed mode, sharing"/>
++    <property name="java.vendor" value="Debian"/>
++    <property name="java.vm.version" value="17.0.10+7-Debian-1"/>
+     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+-    <property name="java.class.version" value="55.0"/>
++    <property name="java.class.version" value="61.0"/>
+   </properties>
+-  <testcase name="basics" classname="org.foo.app.AppComponentTest" time="0.019">
++  <testcase name="basics" classname="org.foo.app.AppComponentTest" time="0.051">
+     <system-err><![CDATA[SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+ SLF4J: Defaulting to no-operation (NOP) logger implementation
+ SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Index: foo-app/target/surefire-reports/org.foo.app.AppComponentTest.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>-------------------------------------------------------------------------------\r\nTest set: org.foo.app.AppComponentTest\r\n-------------------------------------------------------------------------------\r\nTests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.062 s -- in org.foo.app.AppComponentTest\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/foo-app/target/surefire-reports/org.foo.app.AppComponentTest.txt b/foo-app/target/surefire-reports/org.foo.app.AppComponentTest.txt
+--- a/foo-app/target/surefire-reports/org.foo.app.AppComponentTest.txt	(revision 3f2d9e6b374db8ed72aba096f0ebd100386dc9b8)
++++ b/foo-app/target/surefire-reports/org.foo.app.AppComponentTest.txt	(date 1709658716475)
+@@ -1,4 +1,4 @@
+ -------------------------------------------------------------------------------
+ Test set: org.foo.app.AppComponentTest
+ -------------------------------------------------------------------------------
+-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.062 s -- in org.foo.app.AppComponentTest
++Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.320 s -- in org.foo.app.AppComponentTest
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"b7d78520-da6a-49fa-9814-2e488d65a199\" name=\"Changes\" comment=\"Database interface and class added\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Interface\" />\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"main\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"MavenImportPreferences\">\r\n    <option name=\"generalSettings\">\r\n      <MavenGeneralSettings>\r\n        <option name=\"useMavenConfig\" value=\"true\" />\r\n      </MavenGeneralSettings>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2d5MuAP00jMkqtlVAzORLZPUakC\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"SONARLINT_PRECOMMIT_ANALYSIS\": \"true\",\r\n    \"settings.editor.selected.configurable\": \"preferences.lookFeel\"\r\n  }\r\n}]]></component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"b7d78520-da6a-49fa-9814-2e488d65a199\" name=\"Changes\" comment=\"\" />\r\n      <created>1709293705425</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1709293705425</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Database interface and class added\">\r\n      <created>1709656440603</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1709656440603</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Database interface and class added\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Database interface and class added\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 3f2d9e6b374db8ed72aba096f0ebd100386dc9b8)
++++ b/.idea/workspace.xml	(date 1709947814906)
+@@ -4,7 +4,26 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="b7d78520-da6a-49fa-9814-2e488d65a199" name="Changes" comment="Database interface and class added" />
++    <list default="true" id="b7d78520-da6a-49fa-9814-2e488d65a199" name="Changes" comment="Database interface and class added">
++      <change afterPath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/MTD/IPShuffling.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/MTD/IPShufflingInterface.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/AppCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/AppCommand.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/database/SnortDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/database/SnortDatabase.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/classes/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/classes/META-INF/MANIFEST.MF" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppCommand.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppComponent.class" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/foo-app-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/foo-app-1.0-SNAPSHOT.jar" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/foo-app-1.0-SNAPSHOT.oar" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/foo-app-1.0-SNAPSHOT.oar" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/oar/m2/org/foo/foo-app/1.0-SNAPSHOT/foo-app-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/oar/m2/org/foo/foo-app/1.0-SNAPSHOT/foo-app-1.0-SNAPSHOT.jar" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/surefire-reports/TEST-org.foo.app.AppComponentTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/surefire-reports/TEST-org.foo.app.AppComponentTest.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/surefire-reports/org.foo.app.AppComponentTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/surefire-reports/org.foo.app.AppComponentTest.txt" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/foo-app/target/test-classes/org/foo/app/AppComponentTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/test-classes/org/foo/app/AppComponentTest.class" afterDir="false" />
++    </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -13,11 +32,14 @@
+   <component name="FileTemplateManagerImpl">
+     <option name="RECENT_TEMPLATES">
+       <list>
+-        <option value="Interface" />
+         <option value="Class" />
++        <option value="Interface" />
+       </list>
+     </option>
+   </component>
++  <component name="Git.Merge.Settings">
++    <option name="BRANCH" value="main" />
++  </component>
+   <component name="Git.Settings">
+     <option name="RECENT_BRANCH_BY_REPOSITORY">
+       <map>
+@@ -41,14 +63,14 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+-    "settings.editor.selected.configurable": "preferences.lookFeel"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+Index: foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/root/onos/foo-app/src/main/java/org/foo/app/AppCommand.java\r\n/root/onos/foo-app/src/main/java/org/foo/app/AppComponent.java\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst b/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+--- a/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst	(revision 3f2d9e6b374db8ed72aba096f0ebd100386dc9b8)
++++ b/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst	(date 1709658713447)
+@@ -1,2 +1,4 @@
+-/root/onos/foo-app/src/main/java/org/foo/app/AppCommand.java
+-/root/onos/foo-app/src/main/java/org/foo/app/AppComponent.java
++/media/sf_Investigao/MTD-ONOS-APP/foo-app/src/main/java/org/foo/app/AppComponent.java
++/media/sf_Investigao/MTD-ONOS-APP/foo-app/src/main/java/org/foo/app/database/DatabaseInterface.java
++/media/sf_Investigao/MTD-ONOS-APP/foo-app/src/main/java/org/foo/app/AppCommand.java
++/media/sf_Investigao/MTD-ONOS-APP/foo-app/src/main/java/org/foo/app/database/SnortDatabase.java
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"MavenProjectsManager\">\r\n    <option name=\"originalFiles\">\r\n      <list>\r\n        <option value=\"$PROJECT_DIR$/foo-app/pom.xml\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_19\" default=\"true\" project-jdk-name=\"19\" project-jdk-type=\"JavaSDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 3f2d9e6b374db8ed72aba096f0ebd100386dc9b8)
++++ b/.idea/misc.xml	(date 1709741275208)
+@@ -8,4 +8,7 @@
+     </option>
+   </component>
+   <component name="ProjectRootManager" version="2" languageLevel="JDK_19" default="true" project-jdk-name="19" project-jdk-type="JavaSDK" />
++  <component name="ProjectType">
++    <option name="id" value="jpab" />
++  </component>
+ </project>
+\ No newline at end of file
+Index: foo-app/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/root/onos/foo-app/src/test/java/org/foo/app/AppComponentTest.java\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/foo-app/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst b/foo-app/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+--- a/foo-app/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst	(revision 3f2d9e6b374db8ed72aba096f0ebd100386dc9b8)
++++ b/foo-app/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst	(date 1709658713783)
+@@ -1,1 +1,1 @@
+-/root/onos/foo-app/src/test/java/org/foo/app/AppComponentTest.java
++/media/sf_Investigao/MTD-ONOS-APP/foo-app/src/test/java/org/foo/app/AppComponentTest.java
+Index: foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>org/foo/app/AppComponent.class\r\norg/foo/app/AppCommand.class\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst b/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+--- a/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst	(revision 3f2d9e6b374db8ed72aba096f0ebd100386dc9b8)
++++ b/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst	(date 1709658713443)
+@@ -1,2 +1,4 @@
+ org/foo/app/AppComponent.class
++org/foo/app/database/SnortDatabase.class
+ org/foo/app/AppCommand.class
++org/foo/app/database/DatabaseInterface.class
+Index: foo-app/src/main/java/org/foo/app/AppCommand.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/*\r\n * Copyright 2024-present Open Networking Foundation\r\n *\r\n * Licensed under the Apache License, Version 2.0 (the \"License\");\r\n * you may not use this file except in compliance with the License.\r\n * You may obtain a copy of the License at\r\n *\r\n *     http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Unless required by applicable law or agreed to in writing, software\r\n * distributed under the License is distributed on an \"AS IS\" BASIS,\r\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n * See the License for the specific language governing permissions and\r\n * limitations under the License.\r\n */\r\npackage org.foo.app;\r\n\r\nimport org.apache.karaf.shell.api.action.Command;\r\nimport org.apache.karaf.shell.api.action.lifecycle.Service;\r\nimport org.onosproject.cli.AbstractShellCommand;\r\n\r\n/**\r\n * Sample Apache Karaf CLI command\r\n */\r\n@Service\r\n@Command(scope = \"onos\", name = \"sample\",\r\n         description = \"Sample Apache Karaf CLI command\")\r\npublic class AppCommand extends AbstractShellCommand {\r\n\r\n    @Override\r\n    protected void doExecute() {\r\n        print(\"Hello %s\", \"World\");\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/foo-app/src/main/java/org/foo/app/AppCommand.java b/foo-app/src/main/java/org/foo/app/AppCommand.java
+--- a/foo-app/src/main/java/org/foo/app/AppCommand.java	(revision 3f2d9e6b374db8ed72aba096f0ebd100386dc9b8)
++++ b/foo-app/src/main/java/org/foo/app/AppCommand.java	(date 1709938755720)
+@@ -16,20 +16,37 @@
+ package org.foo.app;
+ 
+ import org.apache.karaf.shell.api.action.Command;
++import org.apache.karaf.shell.api.action.Option;
+ import org.apache.karaf.shell.api.action.lifecycle.Service;
++import org.foo.app.database.DatabaseInterface;
+ import org.onosproject.cli.AbstractShellCommand;
++import org.apache.karaf.shell.api.action.Argument;
+ 
+ /**
+  * Sample Apache Karaf CLI command
+  */
+ @Service
+-@Command(scope = "onos", name = "sample",
+-         description = "Sample Apache Karaf CLI command")
++@Command(scope = "onos", name = "database",
++         description = "DataBase comunications")
+ public class AppCommand extends AbstractShellCommand {
+ 
++    @Option(name = "-t", aliases = { "--table" }, description = "specifies a database table to act on (use with flag --action)", required = false, multiValued = false)
++    String table = null;
++
++    @Argument(index = 0, name = "arg1", description = "", required = false)
++    String arg_1 = null;
++
+     @Override
+     protected void doExecute() {
+-        print("Hello %s", "World");
++        if (table != null){
++            tableRead();
++        }
++    }
++
++    private void tableRead(){
++        DatabaseInterface db = get(DatabaseInterface.class);
++        log.info("Read on "+table);
++        db.readTable(table);
+     }
+ 
+ }
+Index: foo-app/src/main/java/org/foo/app/database/SnortDatabase.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.foo.app.database;\r\n\r\nimport org.osgi.service.component.annotations.*;\r\nimport org.slf4j.Logger;\r\nimport org.slf4j.LoggerFactory;\r\n\r\nimport javax.sql.DataSource;\r\nimport java.sql.*;\r\nimport java.util.*;\r\n\r\n// This class is an OSGi framework component that provides a sevice implemented by the DatabaseInterface.\r\n// The attribute 'immediate = true' indicates that this component will be activated immediately upon registration in the OSGi framework\r\n@Component(immediate = true,\r\n    service = {DatabaseInterface.class}\r\n)\r\n\r\npublic class SnortDatabase implements DatabaseInterface{\r\n\r\n    private final Logger log = LoggerFactory.getLogger(getClass());\r\n\r\n    @Reference\r\n    private DataSource dataSource;\r\n\r\n    @Activate\r\n    protected void activate(){\r\n        log.info(\"Started Snort DB\");\r\n    }\r\n\r\n    @Override\r\n    public void readTable(String table){\r\n\r\n        String readTableString = \"select * from \"+table;\r\n\r\n\r\n        try(Connection con = dataSource.getConnection();\r\n            PreparedStatement prepStmt = con.prepareStatement(readTableString)){\r\n\r\n            ResultSet rs = prepStmt.executeQuery();\r\n            ResultSetMetaData meta = rs.getMetaData();\r\n\r\n\r\n            System.out.println(\"Colum names:\");\r\n            for(int i = 1; i <= meta.getColumnCount(); i++){\r\n                System.out.print(meta.getColumnName(i).toString()+\";\");\r\n            }\r\n            System.out.println();\r\n\r\n            while (rs.next()) {\r\n                for(int i = 1; i <= meta.getColumnCount(); i++) {\r\n                    System.out.print(rs.getString(i)+\"; \");\r\n                }\r\n                System.out.println();\r\n            }\r\n            System.out.println();\r\n\r\n\r\n\r\n        } catch (SQLException throwables) {\r\n            log.info(\"ERROR reading table \"+table+\" from DataBase. \"+getClass());\r\n            throwables.printStackTrace();\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/foo-app/src/main/java/org/foo/app/database/SnortDatabase.java b/foo-app/src/main/java/org/foo/app/database/SnortDatabase.java
+--- a/foo-app/src/main/java/org/foo/app/database/SnortDatabase.java	(revision 3f2d9e6b374db8ed72aba096f0ebd100386dc9b8)
++++ b/foo-app/src/main/java/org/foo/app/database/SnortDatabase.java	(date 1709748325043)
+@@ -31,7 +31,6 @@
+ 
+         String readTableString = "select * from "+table;
+ 
+-
+         try(Connection con = dataSource.getConnection();
+             PreparedStatement prepStmt = con.prepareStatement(readTableString)){
+ 
+Index: foo-app/src/main/java/org/foo/app/MTD/IPShuffling.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/foo-app/src/main/java/org/foo/app/MTD/IPShuffling.java b/foo-app/src/main/java/org/foo/app/MTD/IPShuffling.java
+new file mode 100644
+--- /dev/null	(date 1710202807152)
++++ b/foo-app/src/main/java/org/foo/app/MTD/IPShuffling.java	(date 1710202807152)
+@@ -0,0 +1,126 @@
++package org.foo.app.MTD;
++
++import org.onlab.packet.Ip4Address;
++import org.onosproject.net.DeviceId;
++import org.onosproject.net.flow.DefaultTrafficSelector;
++import org.onosproject.net.flow.DefaultTrafficTreatment;
++import org.onosproject.net.flow.TrafficSelector;
++import org.onosproject.net.flow.TrafficTreatment;
++import org.osgi.service.component.annotations.Activate;
++import org.osgi.service.component.annotations.Component;
++import org.slf4j.Logger;
++import org.slf4j.LoggerFactory;
++
++
++import org.onosproject.net.packet.InboundPacket;
++import org.onosproject.net.packet.PacketContext;
++import org.onosproject.net.packet.PacketProcessor;
++
++import org.onlab.packet.Ethernet;
++import org.onlab.packet.ARP;
++import org.onlab.packet.IpAddress;
++
++
++import java.util.HashMap;
++import java.util.Map;
++
++@Component(immediate = true,
++        service = {IPShufflingInterface.class}
++)
++
++public class IPShuffling implements IPShufflingInterface{
++
++    private final Logger log = LoggerFactory.getLogger(getClass());
++
++    private final long SHUFFLE_INTERVAL = 45000;
++
++    //private final Map<PortNumber, IpAddress> hostToIp = new HashMap<>();
++    //private final Map<IpAddress, PortNumber> ipToHost = new HashMap<>();
++    private final Map<IpAddress, IpAddress> realToVirtual = new HashMap<>();
++    private final Map<IpAddress, IpAddress> virtualToReal = new HashMap<>();
++
++    private Map<Ip4Address, DeviceId> hostAtSwitch = new HashMap<Ip4Address, DeviceId>();
++
++    private final String[] virtItems = {"10.0.0.11", "10.0.0.12", "10.0.0.13", "10.0.0.14",
++            "10.0.0.15", "10.0.0.16", "10.0.0.17", "10.0.0.18", "10.0.0.19", "10.0.0.20",
++            "10.0.0.21", "10.0.0.22", "10.0.0.23", "10.0.0.24", "10.0.0.25", "10.0.0.26",
++            "10.0.0.27", "10.0.0.28", "10.0.0.29", "10.0.0.30", "10.0.0.31", "10.0.0.32",
++            "10.0.0.33", "10.0.0.34", "10.0.0.35", "10.0.0.36", "10.0.0.37", "10.0.0.38",
++            "10.0.0.39", "10.0.0.40", "10.0.0.41", "10.0.0.42", "10.0.0.43", "10.0.0.44",
++            "10.0.0.45", "10.0.0.46", "10.0.0.47", "10.0.0.48", "10.0.0.49", "10.0.0.50",
++            "10.0.0.51", "10.0.0.52", "10.0.0.53", "10.0.0.54", "10.0.0.55", "10.0.0.56",
++            "10.0.0.57", "10.0.0.58", "10.0.0.59", "10.0.0.60", "10.0.0.61", "10.0.0.62",
++            "10.0.0.63", "10.0.0.64", "10.0.0.65", "10.0.0.66", "10.0.0.67", "10.0.0.68",
++            "10.0.0.69", "10.0.0.70"};
++
++    @Activate
++    protected void activate(){
++        log.info("Started IP Shuffling");
++    }
++
++    @Override
++    public void process(PacketContext context) {
++        InboundPacket pkt = context.inPacket();
++        Ethernet ethPkt = pkt.parsed();
++
++        if (ethPkt == null) {
++            return;
++        }
++
++        if (ethPkt.getEtherType() == Ethernet.TYPE_ARP) {
++            this.processArpPacket(context, ethPkt);
++        }
++    }
++
++    private void processArpPacket(PacketContext context, Ethernet ethernet){
++        ARP arpPacket = (ARP) ethernet.getPayload();
++        Ip4Address srcIp = Ip4Address.valueOf(arpPacket.getSenderProtocolAddress());
++        Ip4Address dstIp = Ip4Address.valueOf(arpPacket.getTargetProtocolAddress());
++
++        if (rIP(srcIp) && !hostAtSwitch.containsKey(srcIp)) {
++            hostAtSwitch.put(srcIp, context.inPacket().receivedFrom().deviceId());
++        }
++
++        TrafficTreatment.Builder treatmentBuilder = DefaultTrafficTreatment.builder();
++        TrafficSelector.Builder selectorBuilder = DefaultTrafficSelector.builder()
++                .matchEthType(Ethernet.TYPE_ARP)
++                .matchInPort(context.inPacket().receivedFrom().port());
++
++        if (rIP(srcIp)) {
++            this.realToVirtual.get(srcIp);
++
++        }
++
++        if (vIP(dstIp)) {
++            if (dirConnect(context.inPacket().receivedFrom().deviceId(), this.virtualToReal.get(dstIp))){
++                this.virtualToReal.get(dstIp);
++            }
++        } else if (rIP(dstIp)) {
++            if (!dirConnect(context.inPacket().receivedFrom().deviceId(), dstIp)){
++                // drop packets
++            }
++
++        } else {
++            // drop packets
++        }
++
++
++    }
++
++    private boolean rIP(IpAddress ipAddress) {
++        return this.realToVirtual.containsKey(ipAddress);
++    }
++
++    private boolean vIP(IpAddress ipAddress) {
++        return this.realToVirtual.containsValue(ipAddress);
++    }
++
++    private boolean dirConnect(DeviceId deviceId, IpAddress ipAddress){
++        if (hostAtSwitch.containsKey(ipAddress)) {
++            return hostAtSwitch.get(ipAddress).equals(deviceId);
++        }
++        return true;
++    }
++
++
++}
+Index: foo-app/src/main/java/org/foo/app/MTD/IPShufflingInterface.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/foo-app/src/main/java/org/foo/app/MTD/IPShufflingInterface.java b/foo-app/src/main/java/org/foo/app/MTD/IPShufflingInterface.java
+new file mode 100644
+--- /dev/null	(date 1709832328110)
++++ b/foo-app/src/main/java/org/foo/app/MTD/IPShufflingInterface.java	(date 1709832328110)
+@@ -0,0 +1,4 @@
++package org.foo.app.MTD;
++
++public interface IPShufflingInterface {
++}

@@ -1,0 +1,39 @@
+<changelist name="Changes" date="1710242826562" recycled="false">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Changes/shelved.patch" />
+  <option name="DESCRIPTION" value="Changes" />
+  <binary>
+    <option name="BEFORE_PATH" value="foo-app/target/classes/org/foo/app/AppCommand.class" />
+    <option name="AFTER_PATH" value="foo-app/target/classes/org/foo/app/AppCommand.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Changes/AppCommand.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="foo-app/target/classes/org/foo/app/AppComponent.class" />
+    <option name="AFTER_PATH" value="foo-app/target/classes/org/foo/app/AppComponent.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Changes/AppComponent.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="foo-app/target/test-classes/org/foo/app/AppComponentTest.class" />
+    <option name="AFTER_PATH" value="foo-app/target/test-classes/org/foo/app/AppComponentTest.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Changes/AppComponentTest.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="foo-app/target/oar/m2/org/foo/foo-app/1.0-SNAPSHOT/foo-app-1.0-SNAPSHOT.jar" />
+    <option name="AFTER_PATH" value="foo-app/target/oar/m2/org/foo/foo-app/1.0-SNAPSHOT/foo-app-1.0-SNAPSHOT.jar" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Changes/foo-app-1.0-SNAPSHOT.jar" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="foo-app/target/foo-app-1.0-SNAPSHOT.jar" />
+    <option name="AFTER_PATH" value="foo-app/target/foo-app-1.0-SNAPSHOT.jar" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Changes/foo-app-1.0-SNAPSHOT1.jar" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="foo-app/target/foo-app-1.0-SNAPSHOT.oar" />
+    <option name="AFTER_PATH" value="foo-app/target/foo-app-1.0-SNAPSHOT.oar" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Changes/foo-app-1.0-SNAPSHOT.oar" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value=".idea/sonarlint/issuestore/index.pb" />
+    <option name="AFTER_PATH" value=".idea/sonarlint/issuestore/index.pb" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Changes/index.pb" />
+  </binary>
+</changelist>
