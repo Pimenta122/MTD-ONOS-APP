@@ -1,2 +1,5 @@
+/root/onos/foo-app/target/generated-sources/org/foo/app/ApiDocRegistrator.java
 /root/onos/foo-app/src/main/java/org/foo/app/AppCommand.java
 /root/onos/foo-app/src/main/java/org/foo/app/AppComponent.java
+/root/onos/foo-app/src/main/java/org/foo/app/AppWebResource.java
+/root/onos/foo-app/src/main/java/org/foo/app/AppWebApplication.java
