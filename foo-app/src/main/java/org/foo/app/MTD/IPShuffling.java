@@ -28,7 +28,7 @@ import java.util.Map;
         service = {IPShufflingInterface.class}
 )
 
-public class IPShuffling implements IPShufflingInterface{
+public class IPShuffling implements IPShufflingInterface, PacketProcessor{
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
