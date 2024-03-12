@@ -1,2 +1,5 @@
+org/foo/app/AppWebApplication.class
 org/foo/app/AppComponent.class
 org/foo/app/AppCommand.class
+org/foo/app/AppWebResource.class
+org/foo/app/ApiDocRegistrator.class

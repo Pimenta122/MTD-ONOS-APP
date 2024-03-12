@@ -27,12 +27,17 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <onos.version>2.0.0</onos.version>
+        <api.version>1.0.0</api.version>
+        <api.description>Sample application REST API</api.description>
         <onos.app.name>org.foo.app</onos.app.name>
         <onos.app.title>Foo App</onos.app.title>
+        <api.package>org.foo.app</api.package>
         <onos.app.origin>Foo, Inc.</onos.app.origin>
         <onos.app.category>default</onos.app.category>
         <onos.app.url>http://onosproject.org</onos.app.url>
+        <api.title>Sample app REST API</api.title>
         <onos.app.readme>ONOS OSGi bundle archetype.</onos.app.readme>
+        <web.context>/onos/foo-app</web.context>
     </properties>
 
     <dependencies>
@@ -117,6 +122,41 @@
       <version>4.2.1</version>
       <scope>provided</scope>
     </dependency>
+
+        <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>2.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+        <dependency>
+      <groupId>org.onosproject</groupId>
+      <artifactId>onos-rest</artifactId>
+      <version>${onos.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+        <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>2.9.5</version>
+      <scope>provided</scope>
+    </dependency>
+
+        <dependency>
+      <groupId>org.glassfish.jersey.containers</groupId>
+      <artifactId>jersey-container-servlet</artifactId>
+      <version>2.26</version>
+      <scope>provided</scope>
+    </dependency>
+
+        <dependency>
+      <groupId>org.onosproject</groupId>
+      <artifactId>onlab-rest</artifactId>
+      <version>${onos.version}</version>
+      <scope>provided</scope>
+    </dependency>
     </dependencies>
 
     <build>
@@ -129,6 +169,12 @@
                 <configuration>
           <instructions>
             <Karaf-Commands>org.foo.app</Karaf-Commands>
+            <_wab>src/main/webapp/</_wab>
+            <Include-Resource>WEB-INF/classes/apidoc/swagger.json=target/swagger.json,
+                            {maven-resources}</Include-Resource>
+            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+            <Import-Package>*,org.glassfish.jersey.servlet</Import-Package>
+            <Web-ContextPath>${web.context}</Web-ContextPath>
           </instructions>
         </configuration>
             </plugin>
