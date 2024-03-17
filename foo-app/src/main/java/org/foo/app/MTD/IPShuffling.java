@@ -39,7 +39,7 @@ public class IPShuffling implements IPShufflingInterface, PacketProcessor{
     private final Map<IpAddress, IpAddress> realToVirtual = new HashMap<>();
     private final Map<IpAddress, IpAddress> virtualToReal = new HashMap<>();
 
-    private Map<Ip4Address, DeviceId> hostAtSwitch = new HashMap<Ip4Address, DeviceId>();
+    private Map<Ip4Address, DeviceId> hostAtSwitch = new HashMap<>();
 
     private final String[] virtItems = {"10.0.0.11", "10.0.0.12", "10.0.0.13", "10.0.0.14",
             "10.0.0.15", "10.0.0.16", "10.0.0.17", "10.0.0.18", "10.0.0.19", "10.0.0.20",
