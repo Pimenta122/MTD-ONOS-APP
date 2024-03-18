@@ -1,11 +1,11 @@
 package org.foo.app.MTD;
 
-import org.onlab.packet.Ip4Address;
+import org.onlab.packet.*;
+import org.onosproject.net.ConnectPoint;
 import org.onosproject.net.DeviceId;
-import org.onosproject.net.flow.DefaultTrafficSelector;
-import org.onosproject.net.flow.DefaultTrafficTreatment;
-import org.onosproject.net.flow.TrafficSelector;
-import org.onosproject.net.flow.TrafficTreatment;
+import org.onosproject.net.Port;
+import org.onosproject.net.PortNumber;
+import org.onosproject.net.flow.*;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
@@ -15,10 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.onosproject.net.packet.InboundPacket;
 import org.onosproject.net.packet.PacketContext;
 import org.onosproject.net.packet.PacketProcessor;
-
-import org.onlab.packet.Ethernet;
-import org.onlab.packet.ARP;
-import org.onlab.packet.IpAddress;
 
 
 import java.util.HashMap;
@@ -30,14 +26,17 @@ import java.util.Map;
 
 public class IPShuffling implements IPShufflingInterface, PacketProcessor{
 
+    private FlowRuleService flowRuleService;
+    private Map<DeviceId, Map<MacAddress, PortNumber>> macToPort = new HashMap<>();
+
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final long SHUFFLE_INTERVAL = 45000;
 
     //private final Map<PortNumber, IpAddress> hostToIp = new HashMap<>();
     //private final Map<IpAddress, PortNumber> ipToHost = new HashMap<>();
-    private final Map<IpAddress, IpAddress> realToVirtual = new HashMap<>();
-    private final Map<IpAddress, IpAddress> virtualToReal = new HashMap<>();
+    private Map<IpAddress, IpAddress> realToVirtual = new HashMap<>();
+    private Map<IpAddress, IpAddress> virtualToReal = new HashMap<>();
 
     private Map<Ip4Address, DeviceId> hostAtSwitch = new HashMap<>();
 
@@ -63,13 +62,39 @@ public class IPShuffling implements IPShufflingInterface, PacketProcessor{
         InboundPacket pkt = context.inPacket();
         Ethernet ethPkt = pkt.parsed();
 
+
         if (ethPkt == null) {
             return;
         }
 
         if (ethPkt.getEtherType() == Ethernet.TYPE_ARP) {
             this.processArpPacket(context, ethPkt);
+        } else if (ethPkt.getEtherType() == Ethernet.TYPE_IPV4){
+
         }
+
+        //MELHORAR ESTE CÓDIGO
+        InboundPacket inPacket = context.inPacket();
+        ConnectPoint connectPoint = inPacket.receivedFrom();
+        DeviceId deviceId = connectPoint.deviceId();
+        PortNumber inPort = connectPoint.port();
+        MacAddress srcMac = ethPkt.getSourceMAC();
+        MacAddress dstMac = ethPkt.getDestinationMAC();
+
+        macToPort.putIfAbsent(deviceId, new HashMap<>());
+        // Logging the information
+        log.info("Packet in " + deviceId + " " + srcMac + " " + dstMac + " " + inPort);
+
+        macToPort.get(deviceId).put(srcMac, inPort);
+        PortNumber outPort;
+        if (macToPort.get(deviceId).containsKey(dstMac)) {
+            outPort = macToPort.get(deviceId).get(dstMac);
+        } else {
+            outPort = PortNumber.FLOOD;
+        }
+        //Até linha 328
+
+
     }
 
     private void processArpPacket(PacketContext context, Ethernet ethernet){
@@ -81,23 +106,69 @@ public class IPShuffling implements IPShufflingInterface, PacketProcessor{
             hostAtSwitch.put(srcIp, context.inPacket().receivedFrom().deviceId());
         }
 
-        TrafficTreatment.Builder treatmentBuilder = DefaultTrafficTreatment.builder();
+        /*TrafficTreatment.Builder treatmentBuilder = DefaultTrafficTreatment.builder();
         TrafficSelector.Builder selectorBuilder = DefaultTrafficSelector.builder()
                 .matchEthType(Ethernet.TYPE_ARP)
-                .matchInPort(context.inPacket().receivedFrom().port());
+                .matchInPort(context.inPacket().receivedFrom().port());*/
+
+        ConnectPoint connectPoint = context.inPacket().receivedFrom();
+        PortNumber portNumber = connectPoint.port();
+        DeviceId deviceId = connectPoint.deviceId();
 
         if (rIP(srcIp)) {
-            this.realToVirtual.get(srcIp);
 
+            TrafficSelector.Builder selectorBuilder = DefaultTrafficSelector.builder()
+                    .matchEthType(Ethernet.TYPE_ARP)
+                    .matchInPort(portNumber)
+                    .matchArpSpa(srcIp)
+                    .matchArpTpa(dstIp);
+
+            // Creating actions to modify ARP packet fields
+            TrafficTreatment.Builder treatmentBuilder = DefaultTrafficTreatment.builder()
+                    .setArpSpa(realToVirtual.get(srcIp));
+
+            //realToVirtual.get(srcIp);
+
+            /*FlowRule flowRule = DefaultFlowRule.builder()
+                    .forDevice(deviceId)
+                    .withSelector(selectorBuilder.build())
+                    .withTreatment(treatmentBuilder.build())
+                    .makePermanent()
+                    .withPriority(10)
+                    //.fromApp(context)
+                    .build();
+
+            flowRuleService.applyFlowRules(flowRule);*/
         }
 
         if (vIP(dstIp)) {
             if (dirConnect(context.inPacket().receivedFrom().deviceId(), this.virtualToReal.get(dstIp))){
-                this.virtualToReal.get(dstIp);
+                //this.virtualToReal.get(dstIp);
+                TrafficSelector.Builder selectorBuilder = DefaultTrafficSelector.builder()
+                        .matchEthType(Ethernet.TYPE_ARP)
+                        .matchInPort(portNumber)
+                        .matchArpTpa(dstIp)
+                        .matchArpSpa(srcIp);
+
+                // Creating actions to modify ARP packet fields
+                TrafficTreatment.Builder treatmentBuilder = DefaultTrafficTreatment.builder()
+                        .setArpSpa(virtualToReal.get(dstIp));
+
+                /*FlowRule flowRule = DefaultFlowRule.builder()
+                        .forDevice(deviceId)
+                        .withSelector(selectorBuilder.build())
+                        .withTreatment(treatmentBuilder.build())
+                        .makePermanent()
+                        .withPriority(10)
+                        //.fromApp(context.appId())
+                        .build();
+
+                flowRuleService.applyFlowRules(flowRule);*/
             }
         } else if (rIP(dstIp)) {
             if (!dirConnect(context.inPacket().receivedFrom().deviceId(), dstIp)){
                 // drop packets
+                System.out.println("Dropping packets from...");
             }
 
         } else {
