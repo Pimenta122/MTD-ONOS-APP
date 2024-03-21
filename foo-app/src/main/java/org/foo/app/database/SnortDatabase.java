@@ -29,7 +29,7 @@ public class SnortDatabase implements DatabaseInterface{
     @Override
     public void readTable(String table){
 
-        String readTableString = "select * from "+table;
+        String readTableString = "select * from " + table;
 
 
         try(Connection con = dataSource.getConnection();
