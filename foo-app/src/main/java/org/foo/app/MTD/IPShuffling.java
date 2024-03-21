@@ -1,5 +1,6 @@
 package org.foo.app.MTD;
 
+import com.google.common.collect.Sets;
 import org.onlab.packet.*;
 import org.onosproject.net.ConnectPoint;
 import org.onosproject.net.Device;
@@ -53,7 +54,7 @@ public class IPShuffling implements IPShufflingInterface, PacketProcessor{
     private Map<IpAddress, IpAddress> virtualToReal = new HashMap<>();
     private Map<Ip4Address, DeviceId> hostAtSwitch = new HashMap<>();
 
-    private Set<DeviceId> devices;
+    private Set<Device> devices;
 
     private Timer timer;
 
@@ -119,25 +120,18 @@ public class IPShuffling implements IPShufflingInterface, PacketProcessor{
         log.info("virtualToReal: {}", virtualToReal);
 
         //isto provavelmente n pode estar aqui
-        deviceService.getDevices().forEach(device -> {
+
+        devices = Sets.newHashSet(deviceService.getAvailableDevices());
+        /*deviceService.getDevices().forEach(device -> {
             if (device.type() == Device.Type.SWITCH) {
                 devices.add(device.id());
                 log.info("Device :" + device.id());
             }
-        });
-        /*java.lang.NullPointerException
-            at org.foo.app.MTD.IPShuffling.lambda$updateVirtualItems$1(IPShuffling.java:124)
-            at java.base/java.util.concurrent.ConcurrentHashMap$ValuesView.forEach(ConcurrentHashMap.java:4772)
-            at java.base/java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1085)
-            at org.foo.app.MTD.IPShuffling.updateVirtualItems(IPShuffling.java:122)
-            at org.foo.app.MTD.IPShuffling.access$200(IPShuffling.java:36)
-            at org.foo.app.MTD.IPShuffling$MTDTask.run(IPShuffling.java:94)
-            at java.base/java.util.TimerThread.mainLoop(Timer.java:556)
-            at java.base/java.util.TimerThread.run(Timer.java:506)*/
+        });*/
 
 
-        /*for (DeviceId deviceId : devices){
-            emptyTable(deviceId);
+        for (Device device : devices){
+            emptyTable(device.id());
 
             TrafficTreatment treatment = DefaultTrafficTreatment.builder()
                     .setOutput(PortNumber.CONTROLLER)
@@ -146,7 +140,7 @@ public class IPShuffling implements IPShufflingInterface, PacketProcessor{
             //possível função
             if (flowRuleService != null) {
                 FlowRule flowRule = DefaultFlowRule.builder()
-                        .forDevice(deviceId)
+                        .forDevice(device.id())
                         .withSelector(DefaultTrafficSelector.emptySelector())
                         .withTreatment(treatment)
                         .withPriority(0)
@@ -158,7 +152,7 @@ public class IPShuffling implements IPShufflingInterface, PacketProcessor{
                 log.error("FlowRuleService is not available");
             }
 
-        }*/
+        }
     }
 
     @Override
