@@ -31,12 +31,12 @@ public class AppComponent {
 
     @Activate
     protected void activate() {
-        log.info("Started");
+        log.info("Started foo.app");
     }
 
     @Deactivate
     protected void deactivate() {
-        log.info("Stopped");
+        log.info("Stopped foo.app");
     }
 
 }
