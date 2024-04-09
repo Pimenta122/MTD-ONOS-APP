@@ -4,28 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7d78520-da6a-49fa-9814-2e488d65a199" name="Changes" comment="generate virtual IPs but the controller doesn't know about it yet">
+    <list default="true" id="b7d78520-da6a-49fa-9814-2e488d65a199" name="Changes" comment=".">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/AppComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/AppComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/foo-app/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/MTD/IPShuffling.java" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/MTD/IPShuffling.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/MTD/IPShufflingInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/MTD/IPShufflingInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foo-app/target/classes/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/classes/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/ApiDocRegistrator.class" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/ApiDocRegistrator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppComponent.class" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppComponent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppWebApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppWebApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppWebResource.class" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/classes/org/foo/app/AppWebResource.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foo-app/target/foo-app-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/foo-app-1.0-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foo-app/target/foo-app-1.0-SNAPSHOT.oar" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/foo-app-1.0-SNAPSHOT.oar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/target/generated-sources/org/foo/app/ApiDocRegistrator.java" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/generated-sources/org/foo/app/ApiDocRegistrator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foo-app/target/oar/m2/org/foo/foo-app/1.0-SNAPSHOT/foo-app-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/oar/m2/org/foo/foo-app/1.0-SNAPSHOT/foo-app-1.0-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foo-app/target/surefire-reports/TEST-org.foo.app.AppComponentTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/surefire-reports/TEST-org.foo.app.AppComponentTest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foo-app/target/surefire-reports/org.foo.app.AppComponentTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/surefire-reports/org.foo.app.AppComponentTest.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foo-app/target/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/swagger.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foo-app/target/test-classes/org/foo/app/AppComponentTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/test-classes/org/foo/app/AppComponentTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +133,14 @@
       <option name="project" value="LOCAL" />
       <updated>1710245644167</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary=".">
+      <created>1712148086724</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1712148086724</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -164,18 +160,8 @@
     <MESSAGE value="IP shuffling structure" />
     <MESSAGE value="AppCommand" />
     <MESSAGE value="packet processor" />
-    <option name="LAST_COMMIT_MESSAGE" value="packet processor" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/MTD/IPShuffling.java</url>
-          <line>187</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="." />
+    <option name="LAST_COMMIT_MESSAGE" value="." />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
