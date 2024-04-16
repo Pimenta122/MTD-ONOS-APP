@@ -21,6 +21,7 @@ import org.onosproject.net.meter.DefaultMeter;
 import org.onosproject.net.meter.Meter;
 import org.onosproject.net.packet.DefaultOutboundPacket;
 import org.onosproject.net.packet.OutboundPacket;
+import org.onosproject.net.packet.PacketPriority;
 import org.onosproject.net.packet.PacketService;
 import org.onosproject.net.topology.Topology;
 import org.onosproject.net.topology.TopologyService;
@@ -106,17 +107,35 @@ public class IPShuffling implements IPShufflingInterface {
         log.info("Started IP Shuffling");
 
         appId = coreService.registerApplication("org.foo.app");
-        packetService.addProcessor(processor, PacketProcessor.director(3));
+        packetService.addProcessor(processor, PacketProcessor.director(2));
 
-        realToVirtual.put(IpAddress.valueOf("192.168.0.1"), null);
-        realToVirtual.put(IpAddress.valueOf("192.168.0.2"), null);
-        realToVirtual.put(IpAddress.valueOf("192.168.0.3"), null);
-        realToVirtual.put(IpAddress.valueOf("192.168.0.4"), null);
+        /*TrafficSelector.Builder selector = DefaultTrafficSelector.builder();
+        selector.matchEthType(Ethernet.TYPE_IPV4);
+        packetService.requestPackets(selector.build(), PacketPriority.REACTIVE, appId);
+        selector.matchEthType(Ethernet.TYPE_ARP);
+        packetService.requestPackets(selector.build(), PacketPriority.REACTIVE, appId);*/
 
-        realIpToMAC.put(IpAddress.valueOf("192.168.0.1"), MacAddress.valueOf("AA:11:11:11:11:01"));
-        realIpToMAC.put(IpAddress.valueOf("192.168.0.2"), MacAddress.valueOf("AA:11:11:11:11:02"));
-        realIpToMAC.put(IpAddress.valueOf("192.168.0.3"), MacAddress.valueOf("AA:11:11:11:11:03"));
-        realIpToMAC.put(IpAddress.valueOf("192.168.0.4"), MacAddress.valueOf("AA:11:11:11:11:04"));
+        realToVirtual.put(Ip4Address.valueOf("192.168.0.1"), null);
+        realToVirtual.put(Ip4Address.valueOf("192.168.0.2"), null);
+        realToVirtual.put(Ip4Address.valueOf("192.168.0.3"), null);
+        realToVirtual.put(Ip4Address.valueOf("192.168.0.4"), null);
+
+        realIpToMAC.put(Ip4Address.valueOf("192.168.0.1"), MacAddress.valueOf("AA:11:11:11:11:01"));
+        realIpToMAC.put(Ip4Address.valueOf("192.168.0.2"), MacAddress.valueOf("AA:11:11:11:11:02"));
+        realIpToMAC.put(Ip4Address.valueOf("192.168.0.3"), MacAddress.valueOf("AA:11:11:11:11:03"));
+        realIpToMAC.put(Ip4Address.valueOf("192.168.0.4"), MacAddress.valueOf("AA:11:11:11:11:04"));
+
+        macToPort.putIfAbsent(DeviceId.deviceId("of:0000000000000005"), new HashMap<>());
+        macToPort.get(DeviceId.deviceId("of:0000000000000005")).put(MacAddress.valueOf("AA:11:11:11:11:03"), PortNumber.portNumber(2));
+
+        macToPort.putIfAbsent(DeviceId.deviceId("of:0000000000000005"), new HashMap<>());
+        macToPort.get(DeviceId.deviceId("of:0000000000000005")).put(MacAddress.valueOf("AA:11:11:11:11:01"), PortNumber.portNumber(1));
+
+        macToPort.putIfAbsent(DeviceId.deviceId("of:0000000000000001"), new HashMap<>());
+        macToPort.get(DeviceId.deviceId("of:0000000000000001")).put(MacAddress.valueOf("AA:11:11:11:11:03"), PortNumber.portNumber(2));
+
+        macToPort.putIfAbsent(DeviceId.deviceId("of:0000000000000001"), new HashMap<>());
+        macToPort.get(DeviceId.deviceId("of:0000000000000001")).put(MacAddress.valueOf("AA:11:11:11:11:01"), PortNumber.portNumber(1));
 
         timer = new Timer();
         timer.schedule(new MTDTask(), 0, SHUFFLE_INTERVAL);
@@ -126,6 +145,8 @@ public class IPShuffling implements IPShufflingInterface {
     protected void deactivate() {
         packetService.removeProcessor(processor);
         processor = null;
+
+        timer.cancel();
         timer = null;
         log.info("Stopped IP Shuffling");
     }
@@ -155,22 +176,19 @@ public class IPShuffling implements IPShufflingInterface {
         Random random = new Random();
         int nextInt = random.nextInt(virtIPs.length);
 
-        for (IpAddress key : realToVirtual.keySet()) {
+        for (IpAddress key :  realToVirtual.keySet()) {
             realToVirtual.put(key, IpAddress.valueOf(virtIPs[nextInt]));
             nextInt = (nextInt + 1) % virtIPs.length;
         }
 
         virtualToReal = realToVirtual.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 
-        log.info("realToVirtual: {}", realToVirtual);
-        log.info("virtualToReal: {}", virtualToReal);
-
-        //isto provavelmente n pode estar aqui
+        log.info("realToVirtual: {}",  realToVirtual);
+        log.info("virtualToReal: {}",  virtualToReal);
 
         devices = deviceService.getAvailableDevices();
 
         for (Device device : devices) {
-            //log.info("Device " + device.id());
             emptyTable(device.id());
 
             TrafficTreatment treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.CONTROLLER).build();
@@ -188,7 +206,8 @@ public class IPShuffling implements IPShufflingInterface {
                         .makePermanent().build();
 
                 flowRuleService.applyFlowRules(flowRule);
-                //log.info("regra instalada");
+
+                //log.info("Device {} regra instalada", device.id());
             } else {
                 log.error("FlowRuleService is not available");
             }
@@ -219,6 +238,8 @@ public class IPShuffling implements IPShufflingInterface {
             MacAddress dstMac = ethPkt.getDestinationMAC();
 
             boolean pktDrop = false;
+
+            //log.info("Device: {}", deviceId);
             if (ethPkt.getEtherType() == Ethernet.TYPE_ARP) {
 
                 ARP arpPacket = (ARP) ethPkt.getPayload();
@@ -229,6 +250,7 @@ public class IPShuffling implements IPShufflingInterface {
 
                 if (rIP(srcIp) && !hostAtSwitch.containsKey(srcIp)) {
                     hostAtSwitch.put(srcIp, deviceId);
+                    //log.info("hostAtSwitch: {}",  hostAtSwitch);
                 }
 
                 if (rIP(srcIp)) {
@@ -244,12 +266,13 @@ public class IPShuffling implements IPShufflingInterface {
                     //treatmentBuilder = DefaultTrafficTreatment.builder().setArpSpa(realToVirtual.get(srcIp)).build();
 
                     treatmentBuilder.setArpSpa(realToVirtual.get(srcIp));
+                            //.setEthSrc(ethPkt.getSourceMAC());
 
 
                 }
 
                 if (vIP(dstIp)) {
-
+                    //log.info("destino é virtual");
                     selectorBuilder = DefaultTrafficSelector.builder().matchEthType(Ethernet.TYPE_ARP)
                             .matchInPort(portNumber)
                             .matchArpTpa(dstIp)
@@ -262,10 +285,11 @@ public class IPShuffling implements IPShufflingInterface {
                         // Creating actions to modify ARP packet fields
                         //treatmentBuilder = DefaultTrafficTreatment.builder().setArpTpa(virtualToReal.get(dstIp)).build();
 
-                        treatmentBuilder.setArpTpa(virtualToReal.get(dstIp));
-
                         dstMac = realIpToMAC.get(virtualToReal.get(dstIp));
-                        log.info("ARP: Destination Mac {}", dstMac);
+                        treatmentBuilder.setArpTpa(virtualToReal.get(dstIp));
+                                //.setEthDst(dstMac);
+
+                        //log.info("ARP: Destination Mac {}", dstMac);
 
                     }
                 } else if (rIP(dstIp)) {
@@ -279,12 +303,14 @@ public class IPShuffling implements IPShufflingInterface {
                     if (!dirConnect(deviceId, dstIp)) {
                         // drop packets
                         log.info("ARP: 1-Dropping packets from...");
+                        treatmentBuilder.drop();
                         pktDrop = true;
                     }
 
                 } else {
                     // drop packets
                     pktDrop = true;
+                    treatmentBuilder.drop();
                     log.info("ARP: 2-Dropping packets from...");
                 }
 
@@ -293,8 +319,15 @@ public class IPShuffling implements IPShufflingInterface {
                 IPv4 ipv4Packet = (IPv4) ethPkt.getPayload();
                 Ip4Address srcIp = Ip4Address.valueOf(ipv4Packet.getSourceAddress());
                 Ip4Address dstIp = Ip4Address.valueOf(ipv4Packet.getDestinationAddress());
+                Ip4Prefix matchIp4SrcPrefix =
+                        Ip4Prefix.valueOf(ipv4Packet.getSourceAddress(),
+                                Ip4Prefix.MAX_MASK_LENGTH);
 
-                log.info("Pacotes do tipo ICMP - Source: {} - Destination: {}", srcIp, dstIp);
+                Ip4Prefix matchIp4DstPrefix =
+                        Ip4Prefix.valueOf(ipv4Packet.getDestinationAddress(),
+                                Ip4Prefix.MAX_MASK_LENGTH);
+
+                log.info("Pacotes do tipo ICMP - Source: {} - Destination: {} e o mapeamento é {}", srcIp, dstIp, realToVirtual);
 
                 if (rIP(srcIp) && !hostAtSwitch.containsKey(srcIp)) {
                     hostAtSwitch.put(srcIp, deviceId);
@@ -305,14 +338,15 @@ public class IPShuffling implements IPShufflingInterface {
                     selectorBuilder = DefaultTrafficSelector.builder()
                             .matchEthType(Ethernet.TYPE_IPV4)
                             .matchInPort(portNumber)
-                            .matchIPSrc(IpPrefix.valueOf(srcIp, Ip4Prefix.MAX_MASK_LENGTH))
-                            .matchIPDst(IpPrefix.valueOf(dstIp, Ip4Prefix.MAX_MASK_LENGTH))
+                            .matchIPSrc(matchIp4SrcPrefix)
+                            .matchIPDst(matchIp4DstPrefix)
                             .build();
 
                     // Creating actions to modify ARP packet fields
                     //treatmentBuilder = DefaultTrafficTreatment.builder().setIpSrc(realToVirtual.get(srcIp)).build();
 
                     treatmentBuilder.setIpSrc(realToVirtual.get(srcIp));
+                            //.setEthSrc(ethPkt.getSourceMAC());
 
                 }
 
@@ -321,17 +355,17 @@ public class IPShuffling implements IPShufflingInterface {
                     selectorBuilder = DefaultTrafficSelector.builder()
                             .matchEthType(Ethernet.TYPE_IPV4)
                             .matchInPort(portNumber)
-                            .matchIPSrc(IpPrefix.valueOf(srcIp, Ip4Prefix.MAX_MASK_LENGTH))
-                            .matchIPDst(IpPrefix.valueOf(dstIp, Ip4Prefix.MAX_MASK_LENGTH)).build();
+                            .matchIPSrc(matchIp4SrcPrefix)
+                            .matchIPDst(matchIp4DstPrefix).build();
 
                     if (dirConnect(deviceId, virtualToReal.get(dstIp))) {
                         log.info("ICMP: IP DESTINO virtual {} -> real {}", dstIp, virtualToReal.get(dstIp));
 
                         //treatmentBuilder = DefaultTrafficTreatment.builder().setIpDst(virtualToReal.get(dstIp)).build();
-
+                        dstMac =  realIpToMAC.get(virtualToReal.get(dstIp));
                         treatmentBuilder.setIpDst(virtualToReal.get(dstIp));
+                                //.setEthDst(dstMac);
 
-                        dstMac = realIpToMAC.get(virtualToReal.get(dstIp));
                         log.info("ICMP: Destination Mac {}", dstMac);
 
                     }
@@ -340,38 +374,40 @@ public class IPShuffling implements IPShufflingInterface {
                     selectorBuilder = DefaultTrafficSelector.builder()
                             .matchEthType(Ethernet.TYPE_IPV4)
                             .matchInPort(portNumber)
-                            .matchIPSrc(IpPrefix.valueOf(srcIp, Ip4Prefix.MAX_MASK_LENGTH))
-                            .matchIPDst(IpPrefix.valueOf(dstIp, Ip4Prefix.MAX_MASK_LENGTH)).build();
+                            .matchIPSrc(matchIp4SrcPrefix)
+                            .matchIPDst(matchIp4DstPrefix).build();
 
                     if (!dirConnect(deviceId, dstIp)) {
                         // drop packets
                         log.info("ICMP: 1-Dropping packets from...");
 
-                        //treatmentBuilder = DefaultTrafficTreatment.builder().drop().build();
-
+                        treatmentBuilder.drop();
                         pktDrop = true;
                     }
 
                 } else {
                     // drop packets
                     pktDrop = true;
+                    treatmentBuilder.drop();
                     log.info("ICMP: 2-Dropping packets from...");
                 }
 
             }
+            //treatmentBuilder.immediate();
 
             //MELHORAR ESTE CÓDIGO
-            /*MacAddress srcMac = ethPkt.getSourceMAC();
-            MacAddress dstMac = ethPkt.getDestinationMAC();
+            MacAddress srcMac = ethPkt.getSourceMAC();
+
+            //dstMac = packet.getDestinationMAC();
 
             //HostId id = HostId.hostId(dstMac);
-            log.info("src mac {} dst mac {}", srcMac, dstMac);
 
-            macToPort.putIfAbsent(deviceId, new HashMap<>());
+
+            //macToPort.putIfAbsent(deviceId, new HashMap<>());
             // Logging the information
             //log.info("Packet in " + deviceId + " " + srcMac + " " + dstMac + " " + portNumber);
 
-            macToPort.get(deviceId).put(srcMac, portNumber);
+            //macToPort.get(deviceId).put(srcMac, portNumber);
 
             PortNumber outPort;
             if (macToPort.get(deviceId).containsKey(dstMac)) {
@@ -381,41 +417,21 @@ public class IPShuffling implements IPShufflingInterface {
                 outPort = PortNumber.FLOOD;
             }
 
-            if (!pktDrop) {
-                treatmentBuilder.setOutput(outPort);
-            }
-
-            if (outPort != PortNumber.FLOOD){
-                FlowRule flowRule = DefaultFlowRule.builder()
-                        .forDevice(deviceId)
-                        .withSelector(selectorBuilder)
-                        .withTreatment(treatmentBuilder.build())
-                        .makePermanent()
-                        .withPriority(10)
-                        .fromApp(appId).build();
-
-                flowRuleService.applyFlowRules(flowRule);
-                log.info("regra instalada");
-            }*/
-
-
-            // Do we know who this is for? If not, flood and bail.
-            Host dst = hostService.getHost(HostId.hostId(dstMac));
+            /*Host dst = hostService.getHost(HostId.hostId(dstMac));
+            //log.info("host {}", dst);
             if (dst == null) {
                 //log.info("HOST NÃO ENCONTRADO");
                 flood(context);
                 return;
             }
 
-            // Otherwise, get a set of paths that lead from here to the
-            // destination edge switch.
             Set<Path> paths =
                     topologyService.getPaths(topologyService.currentTopology(),
                             pkt.receivedFrom().deviceId(),
                             dst.location().deviceId());
             if (paths.isEmpty()) {
                 // If there are no paths, flood and bail.
-                log.info("NO PATHS");
+                //log.info("NO PATHS");
                 flood(context);
                 return;
             }
@@ -429,27 +445,29 @@ public class IPShuffling implements IPShufflingInterface {
                 flood(context);
                 return;
             }
+            log.info("HOST E CAMINHO ENCONTRADO src mac {} dst mac {}", srcMac, dstMac);*/
 
-            treatmentBuilder.setOutput(path.src().port());
+            if (!pktDrop) {
+
+                treatmentBuilder.setOutput(outPort);
+            }
+
+            if (outPort != PortNumber.FLOOD){
+                FlowRule flowRule = DefaultFlowRule.builder()
+                        .forDevice(deviceId)
+                        .withSelector(selectorBuilder)
+                        .withTreatment(treatmentBuilder.build())
+                        .makePermanent()
+                        .withPriority(1)
+                        .fromApp(appId).build();
+
+                flowRuleService.applyFlowRules(flowRule);
+                log.info("Regra instalada");
+            }
 
 
-            FlowRule flowRule = DefaultFlowRule.builder()
-                    .forDevice(deviceId)
-                    .withSelector(selectorBuilder)
-                    .withTreatment(treatmentBuilder.build())
-                    .makePermanent()
-                    .withPriority(10)
-                    .fromApp(appId).build();
+            forwardPacketToDst(context, portNumber, deviceId, treatmentBuilder.build());
 
-            flowRuleService.applyFlowRules(flowRule);
-            log.info("regra instalada");
-
-            forwardPacketToDst(context, deviceId, treatmentBuilder.build());
-            /*if (pktDrop) {
-                packetOut(context, outPort);
-            } else {
-                forwardPacketToDst(context, deviceId, treatmentBuilder.build());
-            }*/
 
         }
 
@@ -488,22 +506,22 @@ public class IPShuffling implements IPShufflingInterface {
         context.send();
     }
 
-    private void forwardPacketToDst(PacketContext context, DeviceId deviceId, TrafficTreatment treatment) {
+    private void forwardPacketToDst(PacketContext context, PortNumber portNumber, DeviceId deviceId, TrafficTreatment treatment) {
 
         OutboundPacket packet;
         ByteBuffer buffer = ByteBuffer.wrap(context.inPacket().parsed().serialize());
-        packet = new DefaultOutboundPacket(deviceId, treatment, buffer);
+        packet = new DefaultOutboundPacket(deviceId, treatment, buffer, portNumber);
         //packet = new DefaultOutboundPacket(deviceId, context.treatmentBuilder().build(), context.inPacket().unparsed());
-
+        //log.info("Tratamento do pacote: {}", treatment);
         this.packetService.emit(packet);
     }
 
     // Floods the specified packet if permissible.
     private void flood(PacketContext context) {
-        //log.info("FLOOD");
+
         if (topologyService.isBroadcastPoint(topologyService.currentTopology(),
                 context.inPacket().receivedFrom())) {
-
+            //log.info("FLOOD");
             packetOut(context, PortNumber.FLOOD);
         } else {
             context.block();
@@ -513,16 +531,16 @@ public class IPShuffling implements IPShufflingInterface {
 
 
     private boolean rIP(IpAddress ipAddress) {
-        return this.realToVirtual.containsKey(ipAddress);
+        return realToVirtual.containsKey(ipAddress);
     }
 
     private boolean vIP(IpAddress ipAddress) {
-        return this.realToVirtual.containsValue(ipAddress);
+        return realToVirtual.containsValue(ipAddress);
     }
 
     private boolean dirConnect(DeviceId deviceId, IpAddress ipAddress) {
-        if (hostAtSwitch.containsKey(ipAddress)) {
-            return hostAtSwitch.get(ipAddress).equals(deviceId);
+        if ( hostAtSwitch.containsKey(ipAddress)) {
+            return  hostAtSwitch.get(ipAddress).equals(deviceId);
         }
         return true;
     }
