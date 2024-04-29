@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7d78520-da6a-49fa-9814-2e488d65a199" name="Changes" comment="nesta solução é possível fazer alguns pings">
+    <list default="true" id="b7d78520-da6a-49fa-9814-2e488d65a199" name="Changes" comment="all works -&gt; linear topology">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/MTD/IPShuffling.java" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/src/main/java/org/foo/app/MTD/IPShuffling.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foo-app/target/classes/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/foo-app/target/classes/META-INF/MANIFEST.MF" afterDir="false" />
@@ -30,7 +30,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="dev" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -167,7 +167,8 @@
     <MESSAGE value="packet processor" />
     <MESSAGE value="." />
     <MESSAGE value="nesta solução é possível fazer alguns pings" />
-    <option name="LAST_COMMIT_MESSAGE" value="nesta solução é possível fazer alguns pings" />
+    <MESSAGE value="all works -&gt; linear topology" />
+    <option name="LAST_COMMIT_MESSAGE" value="all works -&gt; linear topology" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

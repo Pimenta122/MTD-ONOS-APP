@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1713279175952
+Bnd-LastModified: 1714220183904
 Build-Jdk: 17.0.10
 Built-By: root
 Bundle-ClassPath: WEB-INF/classes
@@ -14,8 +14,9 @@ Export-Package: org.foo.app;uses:="javax.ws.rs,javax.ws.rs.core,org.apac
  rg.onlab.rest,org.onosproject.cli,org.onosproject.rest";version="1.0.0"
  ,org.foo.app.database;version="1.0.0",org.foo.app.MTD;uses:="org.onospr
  oject.core,org.onosproject.net,org.onosproject.net.device,org.onosproje
- ct.net.flow,org.onosproject.net.host,org.onosproject.net.packet,org.ono
- sproject.net.topology";version="1.0.0"
+ ct.net.flow,org.onosproject.net.flowobjective,org.onosproject.net.host,
+ org.onosproject.net.packet,org.onosproject.net.topology";version="1.0.0
+ "
 Import-Package: com.fasterxml.jackson.databind;version="[2.9,3)",com.fas
  terxml.jackson.databind.node;version="[2.9,3)",com.google.common.collec
  t;version="[22.0,23)",javax.sql,javax.ws.rs;version="[2.1,3)",javax.ws.
@@ -25,10 +26,11 @@ Import-Package: com.fasterxml.jackson.databind;version="[2.9,3)",com.fas
  rsion="[2.7,3)",org.onosproject.cli;version="[2.7,3)",org.onosproject.c
  ore;version="[2.7,3)",org.onosproject.net;version="[2.7,3)",org.onospro
  ject.net.device;version="[2.7,3)",org.onosproject.net.flow;version="[2.
- 7,3)",org.onosproject.net.host;version="[2.7,3)",org.onosproject.net.pa
- cket;version="[2.7,3)",org.onosproject.net.topology;version="[2.7,3)",o
- rg.onosproject.rest;version="[2.7,3)",org.slf4j;version="[1.7,2)",org.g
- lassfish.jersey.servlet;version="[2.26,3)"
+ 7,3)",org.onosproject.net.flowobjective;version="[2.7,3)",org.onosproje
+ ct.net.host;version="[2.7,3)",org.onosproject.net.packet;version="[2.7,
+ 3)",org.onosproject.net.topology;version="[2.7,3)",org.onosproject.rest
+ ;version="[2.7,3)",org.slf4j;version="[1.7,2)",org.glassfish.jersey.ser
+ vlet;version="[2.26,3)"
 Karaf-Commands: org.foo.app
 Provide-Capability: osgi.service;objectClass:List<String>="org.foo.app.M
  TD.IPShufflingInterface",osgi.service;objectClass:List<String>="org.foo
@@ -40,12 +42,14 @@ Require-Capability: osgi.extender;filter:="(&(osgi.extender=osgi.compone
  vice;filter:="(objectClass=org.onosproject.net.device.DeviceService)";e
  ffective:=active,osgi.service;filter:="(objectClass=org.onosproject.net
  .flow.FlowRuleService)";effective:=active,osgi.service;filter:="(object
- Class=org.onosproject.net.host.HostService)";effective:=active,osgi.ser
- vice;filter:="(objectClass=org.onosproject.net.packet.PacketService)";e
- ffective:=active,osgi.service;filter:="(objectClass=org.onosproject.net
- .topology.TopologyService)";effective:=active,osgi.service;filter:="(ob
- jectClass=org.onosproject.rest.ApiDocService)";effective:=active,osgi.e
- e;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+ Class=org.onosproject.net.flowobjective.FlowObjectiveService)";effectiv
+ e:=active,osgi.service;filter:="(objectClass=org.onosproject.net.host.H
+ ostService)";effective:=active,osgi.service;filter:="(objectClass=org.o
+ nosproject.net.packet.PacketService)";effective:=active,osgi.service;fi
+ lter:="(objectClass=org.onosproject.net.topology.TopologyService)";effe
+ ctive:=active,osgi.service;filter:="(objectClass=org.onosproject.rest.A
+ piDocService)";effective:=active,osgi.ee;filter:="(&(osgi.ee=JavaSE)(ve
+ rsion=1.8))"
 Service-Component: OSGI-INF/org.foo.app.ApiDocRegistrator.xml,OSGI-INF/o
  rg.foo.app.AppComponent.xml,OSGI-INF/org.foo.app.MTD.IPShuffling.xml,OS
  GI-INF/org.foo.app.database.SnortDatabase.xml
