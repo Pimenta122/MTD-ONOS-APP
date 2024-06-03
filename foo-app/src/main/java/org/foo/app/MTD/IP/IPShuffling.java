@@ -1,4 +1,4 @@
-package org.foo.app.MTD;
+package org.foo.app.MTD.IP;
 
 import com.google.common.collect.Maps;
 import org.onlab.packet.*;
@@ -10,23 +10,14 @@ import org.onosproject.net.DeviceId;
 import org.onosproject.net.Host;
 import org.onosproject.net.HostId;
 import org.onosproject.net.Path;
-import org.onosproject.net.Port;
 import org.onosproject.net.PortNumber;
 import org.onosproject.net.device.DeviceService;
 import org.onosproject.net.flow.*;
-import org.onosproject.net.flowobjective.DefaultForwardingObjective;
 import org.onosproject.net.flowobjective.FlowObjectiveService;
-import org.onosproject.net.flowobjective.ForwardingObjective;
 import org.onosproject.net.host.HostService;
-import org.onosproject.net.meter.Band;
-import org.onosproject.net.meter.DefaultBand;
-import org.onosproject.net.meter.DefaultMeter;
-import org.onosproject.net.meter.Meter;
 import org.onosproject.net.packet.DefaultOutboundPacket;
 import org.onosproject.net.packet.OutboundPacket;
-import org.onosproject.net.packet.PacketPriority;
 import org.onosproject.net.packet.PacketService;
-import org.onosproject.net.topology.Topology;
 import org.onosproject.net.topology.TopologyService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -36,27 +27,22 @@ import org.osgi.service.component.annotations.Reference;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static org.onosproject.net.flowobjective.Objective.MAX_PRIORITY;
 
 import org.onosproject.net.packet.InboundPacket;
 import org.onosproject.net.packet.PacketContext;
 import org.onosproject.net.packet.PacketProcessor;
 
 
-import javax.crypto.MacSpi;
 import java.nio.ByteBuffer;
-import java.nio.file.Paths;
-import java.util.Collections;
+import java.security.SecureRandom;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
 
-@Component(immediate = true, service = {IPShufflingInterface.class})
+/*@Component(immediate = true, service = {IPShufflingInterface.class})
 
 public class IPShuffling implements IPShufflingInterface {
 
@@ -117,21 +103,14 @@ public class IPShuffling implements IPShufflingInterface {
     private final Ip4Address snort = Ip4Address.valueOf("192.168.0.4");
 
     private boolean pktDrop;
-    private int count = 0;
 
 
-    @Activate
+    /*@Activate
     protected void activate() {
         log.info("Started IP Shuffling");
 
         appId = coreService.registerApplication("org.foo.app");
         packetService.addProcessor(processor, PacketProcessor.director(2));
-
-        /*TrafficSelector.Builder selector = DefaultTrafficSelector.builder();
-        selector.matchEthType(Ethernet.TYPE_IPV4);
-        packetService.requestPackets(selector.build(), PacketPriority.REACTIVE, appId);
-        selector.matchEthType(Ethernet.TYPE_ARP);
-        packetService.requestPackets(selector.build(), PacketPriority.REACTIVE, appId);*/
 
         realToVirtual.put(server, null);
         realToVirtual.put(honeypot, null);
@@ -166,7 +145,6 @@ public class IPShuffling implements IPShufflingInterface {
         hostAtSwitch.put(attacker, DeviceId.deviceId("of:0000000000000005"));
         hostAtSwitch.put(honeypot, DeviceId.deviceId("of:0000000000000001"));
 
-
         timer = new Timer();
         timer.schedule(new MTDTask(), 0, SHUFFLE_INTERVAL);
     }
@@ -179,10 +157,10 @@ public class IPShuffling implements IPShufflingInterface {
         timer.cancel();
         timer = null;
         log.info("Stopped IP Shuffling");
-    }
+    }*/
 
 
-    private class MTDTask extends TimerTask {
+    /*private class MTDTask extends TimerTask {
         @Override
         public void run() {
             // Perform MTD techniques here
@@ -203,7 +181,7 @@ public class IPShuffling implements IPShufflingInterface {
 
     public void updateVirtualIP() {
 
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
         int nextInt = random.nextInt(virtIPs.length);
 
         for (IpAddress key :  realToVirtual.keySet()) {
@@ -226,12 +204,12 @@ public class IPShuffling implements IPShufflingInterface {
             //log.info("Antes de instalar a regra");
             if (flowRuleService != null) {
                 //log.info("Entrei para instalar a regra");
-
+                //TODO: alterar a prioridade
                 FlowRule flowRule = DefaultFlowRule.builder()
                         .forDevice(device.id())
                         .withSelector(DefaultTrafficSelector.emptySelector())
                         .withTreatment(treatment)
-                        .withPriority(0)
+                        .withPriority(5)
                         .fromApp(appId)
                         .makePermanent().build();
 
@@ -367,10 +345,6 @@ public class IPShuffling implements IPShufflingInterface {
                 log.info("Pacotes do tipo ICMP - Source: {} - Destination: {}", srcIp, dstIp);
 
 
-                /*if (redirect && ipv4Packet.getProtocol() == IPv4.PROTOCOL_TCP) {
-                    redirectToHoneypot(context, deviceId, ethPkt, ipv4Packet, srcIp, dstIp, portNumber);
-                    return;
-                }*/
 
                 if (rIP(srcIp) && !hostAtSwitch.containsKey(srcIp)) {
                     hostAtSwitch.put(srcIp, deviceId);
@@ -453,12 +427,12 @@ public class IPShuffling implements IPShufflingInterface {
             //macToPort.get(deviceId).put(srcMac, portNumber);
 
             PortNumber outPort;
-            /*if (macToPort.get(deviceId).containsKey(dstMac)) {
-                outPort = macToPort.get(deviceId).get(dstMac);
-                log.info("Porto In: {} -> Porto Out: {} -> dstMAC: {}", portNumber, outPort, dstMac);
-            } else {
-                outPort = PortNumber.FLOOD;
-            }*/
+            //if (macToPort.get(deviceId).containsKey(dstMac)) {
+            //    outPort = macToPort.get(deviceId).get(dstMac);
+            //    log.info("Porto In: {} -> Porto Out: {} -> dstMAC: {}", portNumber, outPort, dstMac);
+            //} else {
+            //    outPort = PortNumber.FLOOD;
+            //}
 
             // Do we know who this is for? If not, flood and bail.
             Host dst = hostService.getHost(HostId.hostId(dstMac));
@@ -521,7 +495,7 @@ public class IPShuffling implements IPShufflingInterface {
                     .withSelector(selectorBuilder)
                     .withTreatment(treatmentBuilder.build())
                     .makePermanent()
-                    .withPriority(100)
+                    .withPriority(10)
                     .fromApp(appId).build();
 
             flowRuleService.applyFlowRules(flowRule);
@@ -566,9 +540,9 @@ public class IPShuffling implements IPShufflingInterface {
 
         if (srcIpToCompare.equals(attacker) && dstIpToCompare.equals(server)) {
 
-            /*selector.matchIPSrc(IpPrefix.valueOf(srcIp, Ip4Prefix.MAX_MASK_LENGTH))
-            .matchIPDst(IpPrefix.valueOf(dstIp, Ip4Prefix.MAX_MASK_LENGTH))
-            .matchIPProtocol(IPv4.PROTOCOL_TCP);*/
+            //selector.matchIPSrc(IpPrefix.valueOf(srcIp, Ip4Prefix.MAX_MASK_LENGTH))
+            //.matchIPDst(IpPrefix.valueOf(dstIp, Ip4Prefix.MAX_MASK_LENGTH))
+            //.matchIPProtocol(IPv4.PROTOCOL_TCP);
 
             //ipv4Packet.setDestinationAddress(honeypot.toInt());
             //ethPkt.setDestinationMACAddress(realIpToMAC.get(honeypot));
@@ -648,14 +622,14 @@ public class IPShuffling implements IPShufflingInterface {
 
             log.info("Creating rule for honeypot->attacker > server->attacker");
 
-            /*selector.matchIPSrc(IpPrefix.valueOf(srcIp, Ip4Prefix.MAX_MASK_LENGTH))
-                    .matchIPDst(IpPrefix.valueOf(dstIp, Ip4Prefix.MAX_MASK_LENGTH))
-                    .matchIPProtocol(IPv4.PROTOCOL_TCP);*/
+            //selector.matchIPSrc(IpPrefix.valueOf(srcIp, Ip4Prefix.MAX_MASK_LENGTH))
+            //        .matchIPDst(IpPrefix.valueOf(dstIp, Ip4Prefix.MAX_MASK_LENGTH))
+            //        .matchIPProtocol(IPv4.PROTOCOL_TCP);
 
-            /*ipv4Packet.setSourceAddress(server.toInt());
-            ethPkt.setSourceMACAddress(realIpToMAC.get(server));
+            //ipv4Packet.setSourceAddress(server.toInt());
+            //ethPkt.setSourceMACAddress(realIpToMAC.get(server));
 
-            treatment.setIpSrc(IpAddress.valueOf(ipv4Packet.getSourceAddress())).setEthSrc(ethPkt.getSourceMAC());*/
+            //treatment.setIpSrc(IpAddress.valueOf(ipv4Packet.getSourceAddress())).setEthSrc(ethPkt.getSourceMAC());
 
             if (rIP(srcIp)) {
                 selector.matchInPort(inPort).matchIPSrc(IpPrefix.valueOf(srcIp, Ip4Prefix.MAX_MASK_LENGTH))
@@ -717,10 +691,7 @@ public class IPShuffling implements IPShufflingInterface {
 
         //TODO: caminho vai ser o mesmo do caminho da mudança de IPs, mas vai mudar quando temos uma conexão direta com o destino do pacote
 
-        /*Map<TrafficTreatment.Builder, Map<TrafficSelector.Builder, Map<IPv4, Ethernet>>> info = Maps.newConcurrentMap();
-        info.putIfAbsent(treatment, new HashMap<>());
-        info.get(treatment).putIfAbsent(selector, new HashMap<>());
-        info.get(treatment).get(selector).put(ipv4Packet, ethPkt);*/
+
 
         MacAddress srcMac = ethPkt.getSourceMAC();
         dstMac = ethPkt.getDestinationMAC();
@@ -757,23 +728,7 @@ public class IPShuffling implements IPShufflingInterface {
         //log.info("NUM ICMP PACKETS: {}", countPackets);
         //forwardPacketToDst(context, portNumber, deviceId, treatmentBuilder.build());
         //TODO: podem existir casos em que o PortNumber tenha outro valor
-        //packetOut(context,  PortNumber.TABLE);
-        /*Ethernet packet = context.inPacket().parsed();
-        ipv4Packet = (IPv4) packet.getPayload();
-        TCP tcpPacket = (TCP) ipv4Packet.getPayload();
-
-        ipv4Packet.resetChecksum();
-        packet.resetChecksum();
-        tcpPacket.resetChecksum();
-
-        ByteBuffer buffer = ByteBuffer.wrap(packet.serialize());
-
-        // send the packet
-        packetService.emit(new DefaultOutboundPacket(
-                context.inPacket().receivedFrom().deviceId(),
-                treatment.build(),
-                buffer)
-        );*/
+        packetOut(context,  PortNumber.TABLE);
 
 
     }
@@ -802,11 +757,7 @@ public class IPShuffling implements IPShufflingInterface {
     }
 
 
-    /**
-     * Sends a packet out the specified port.
-     * @param context context packet
-     * @param portNumber, NumberPort
-     */
+
     private void packetOut(PacketContext context, PortNumber portNumber) {
         context.treatmentBuilder().setOutput(portNumber);
         context.send();
@@ -853,4 +804,4 @@ public class IPShuffling implements IPShufflingInterface {
     }
 
 
-}
+}*/

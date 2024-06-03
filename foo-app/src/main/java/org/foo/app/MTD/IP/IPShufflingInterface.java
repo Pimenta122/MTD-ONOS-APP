@@ -1,4 +1,4 @@
-package org.foo.app.MTD;
+package org.foo.app.MTD.IP;
 
 import org.onosproject.net.DeviceId;
 
