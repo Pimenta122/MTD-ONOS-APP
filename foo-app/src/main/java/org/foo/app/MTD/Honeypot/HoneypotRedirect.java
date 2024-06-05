@@ -1,4 +1,4 @@
-package org.foo.app.MTD.Route;
+package org.foo.app.MTD.Honeypot;
 
 import org.onlab.packet.ARP;
 import org.onlab.packet.Ethernet;
@@ -30,6 +30,7 @@ import org.onosproject.net.flowobjective.ForwardingObjective;
 import org.onosproject.net.host.HostService;
 import org.onosproject.net.packet.DefaultOutboundPacket;
 import org.onosproject.net.packet.InboundPacket;
+import org.onosproject.net.packet.OutboundPacket;
 import org.onosproject.net.packet.PacketContext;
 import org.onosproject.net.packet.PacketPriority;
 import org.onosproject.net.packet.PacketProcessor;
@@ -44,13 +45,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
-import java.util.HashMap;
 import java.util.Set;
-import java.util.Timer;
 
-@Component(immediate = true, service = {RouteMutationInterface.class})
+@Component(immediate = true, service = {HoneypotRedirectInterface.class})
 
-public class RouteMutation implements RouteMutationInterface{
+public class HoneypotRedirect implements HoneypotRedirectInterface {
 
     @Reference(cardinality = ReferenceCardinality.MANDATORY)
     protected PacketService packetService;
@@ -93,9 +92,9 @@ public class RouteMutation implements RouteMutationInterface{
 
     private RoutePacketProcessor processor = new RoutePacketProcessor();
 
-    @Activate
+    /*@Activate
     protected void activate() {
-        log.info("Started Route Mutation + Honeypot");
+        log.info("Started Honeypot implementation");
 
         appId = coreService.registerApplication("org.foo.app");
         packetService.addProcessor(processor, PacketProcessor.director(10));
@@ -103,7 +102,8 @@ public class RouteMutation implements RouteMutationInterface{
         TrafficSelector.Builder selector = DefaultTrafficSelector.builder();
         selector.matchEthType(Ethernet.TYPE_IPV4);
         packetService.requestPackets(selector.build(), PacketPriority.REACTIVE, appId);
-
+        selector.matchEthType(Ethernet.TYPE_ARP);
+        packetService.requestPackets(selector.build(), PacketPriority.REACTIVE, appId);
 
         devices = deviceService.getAvailableDevices();
 
@@ -139,8 +139,8 @@ public class RouteMutation implements RouteMutationInterface{
         packetService.removeProcessor(processor);
         processor = null;
         flowRuleService.removeFlowRulesById(appId);
-        log.info("Stopped Route Mutation + Honeypot");
-    }
+        log.info("Stopped Honeypot implementation");
+    }*/
 
 
     private class RoutePacketProcessor implements PacketProcessor {
@@ -178,30 +178,44 @@ public class RouteMutation implements RouteMutationInterface{
             //log.info("mac destino {}", ethPkt.getDestinationMAC());
             boolean redirected = false;
 
-            /*if (ethPkt.getEtherType() == Ethernet.TYPE_ARP) {
+            if (ethPkt.getEtherType() == Ethernet.TYPE_ARP) {
 
                 ARP arpPacket = (ARP) ethPkt.getPayload();
                 Ip4Address srcIp = Ip4Address.valueOf(arpPacket.getSenderProtocolAddress());
                 Ip4Address dstIp = Ip4Address.valueOf(arpPacket.getTargetProtocolAddress());
+                log.info("destino arp 11: {}", dstIp);
 
                 if (dstIp.equals(server)) {
                     log.info("Alterar os pacotes ARP");
-                    arpPacket.setTargetHardwareAddress(honeypotMac.toBytes());
-                    arpPacket.setTargetProtocolAddress(honeypot.toInt());
-                    arpPacket.setSenderHardwareAddress(honeypotMac.toBytes());
-                    arpPacket.setSenderProtocolAddress(honeypot.toInt());
-                    ethPkt.setSourceMACAddress(honeypotMac);
+
+
+                    Ethernet arpReply = ARP.buildArpReply(
+                            dstIp,
+                            honeypotMac,
+                            ethPkt);
+
+                    treatment.setOutput(portNumber)
+                            .build();
+
+                    OutboundPacket outboundPacket = new DefaultOutboundPacket(
+                            context.inPacket().receivedFrom().deviceId(),
+                            treatment.build(),
+                            ByteBuffer.wrap(arpReply.serialize()));
+
+                    packetService.emit(outboundPacket);
+                    context.block();
+                    return;
                 }
 
 
-            }*/
+
+            }
 
             if (ethPkt.getEtherType() == Ethernet.TYPE_IPV4) {
                 IPv4 ipv4Packet = (IPv4) ethPkt.getPayload();
                 byte ipv4Protocol = ipv4Packet.getProtocol();
                 Ip4Address srcIp = Ip4Address.valueOf(ipv4Packet.getSourceAddress());
                 Ip4Address dstIp = Ip4Address.valueOf(ipv4Packet.getDestinationAddress());
-
 
                 if (ipv4Protocol == IPv4.PROTOCOL_TCP) {
                     if (dstIp.equals(server)) {
@@ -229,10 +243,10 @@ public class RouteMutation implements RouteMutationInterface{
                                 .matchIPProtocol(IPv4.PROTOCOL_TCP);
 
                         ipv4Packet.setSourceAddress(server.toInt());
-                        ethPkt.setSourceMACAddress(serverMac);
+                        //ethPkt.setSourceMACAddress(serverMac);
 
                         treatment.setIpSrc(IpAddress.valueOf(ipv4Packet.getSourceAddress()))
-                                .setEthSrc(ethPkt.getSourceMAC());
+                                /*.setEthSrc(ethPkt.getSourceMAC())*/;
 
                         redirected = true;
                     }
@@ -284,7 +298,6 @@ public class RouteMutation implements RouteMutationInterface{
 
         Ethernet inPkt = context.inPacket().parsed();
 
-        // If ARP packet then forward directly to output port
         if (inPkt.getEtherType() == Ethernet.TYPE_ARP) {
 
             packetOut(context, portNumber);
@@ -313,7 +326,7 @@ public class RouteMutation implements RouteMutationInterface{
             Ethernet packet = context.inPacket().parsed();
             IPv4 ipv4Packet = (IPv4) packet.getPayload();
 
-            ipv4Packet.resetChecksum();
+            /*ipv4Packet.resetChecksum();
             packet.resetChecksum();
 
             ByteBuffer buffer = ByteBuffer.wrap(packet.serialize());
@@ -322,8 +335,8 @@ public class RouteMutation implements RouteMutationInterface{
                     context.inPacket().receivedFrom().deviceId(),
                     treatmentBuilder.build(),
                     buffer)
-            );
-
+            );*/
+            packetOut(context,  PortNumber.TABLE);
 
             Iterable<Device> devices = deviceService.getDevices();
 
