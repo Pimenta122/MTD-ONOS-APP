@@ -104,6 +104,8 @@ public class IPShuffling implements IPShufflingInterface {
 
     private boolean pktDrop;
 
+    private boolean installDefaultRule = true;
+
 
     /*@Activate
     protected void activate() {
@@ -173,7 +175,12 @@ public class IPShuffling implements IPShufflingInterface {
 
     public void emptyTable(DeviceId deviceId) {
         if (flowRuleService != null) {
-            flowRuleService.getFlowEntries(deviceId).forEach(flowRuleService::removeFlowRules);
+            //flowRuleService.getFlowEntries(deviceId).forEach(flowRuleService::removeFlowRules);
+            flowRuleService.getFlowEntries(deviceId).forEach(flowEntry -> {
+                if (flowEntry.priority() != 5 || flowEntry.appId() != appId.id()) {
+                    flowRuleService.removeFlowRules(flowEntry);
+                }
+            });
         } else {
             log.error("FlowRuleService is not available");
         }
@@ -199,27 +206,33 @@ public class IPShuffling implements IPShufflingInterface {
         for (Device device : devices) {
             emptyTable(device.id());
 
-            TrafficTreatment treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.CONTROLLER).build();
 
-            //log.info("Antes de instalar a regra");
-            if (flowRuleService != null) {
-                //log.info("Entrei para instalar a regra");
-                FlowRule flowRule = DefaultFlowRule.builder()
-                        .forDevice(device.id())
-                        .withSelector(DefaultTrafficSelector.emptySelector())
-                        .withTreatment(treatment)
-                        .withPriority(5)
-                        .fromApp(appId)
-                        .makePermanent().build();
+            if (installDefaultRule) {
+                TrafficTreatment treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.CONTROLLER).build();
 
-                flowRuleService.applyFlowRules(flowRule);
+                //log.info("Antes de instalar a regra");
+                if (flowRuleService != null) {
+                    log.info("Entrei para instalar a regra");
+                    FlowRule flowRule = DefaultFlowRule.builder()
+                            .forDevice(device.id())
+                            .withSelector(DefaultTrafficSelector.emptySelector())
+                            .withTreatment(treatment)
+                            .withPriority(5)
+                            .fromApp(appId)
+                            .makePermanent().build();
 
-                //log.info("Device {} regra instalada", device.id());
-            } else {
-                log.error("FlowRuleService is not available");
+                    flowRuleService.applyFlowRules(flowRule);
+
+                    log.info("Device {} regra instalada", device.id());
+                } else {
+                    log.error("FlowRuleService is not available");
+                }
+
+
             }
 
         }
+        if (installDefaultRule) installDefaultRule = false;
     }
 
     private class MTDPacketProcessor implements PacketProcessor {

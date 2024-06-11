@@ -116,6 +116,8 @@ public class MTD implements MTDInterface{
 
     private boolean pktDrop;
 
+    private boolean installDefaultRule = true;
+
 
     @Activate
     protected void activate() {
@@ -185,12 +187,12 @@ public class MTD implements MTDInterface{
 
     public void emptyTable(DeviceId deviceId) {
         if (flowRuleService != null) {
-            flowRuleService.getFlowEntries(deviceId).forEach(flowRuleService::removeFlowRules);
-            /*flowRuleService.getFlowEntries(deviceId).forEach(flowEntry -> {
-                if (flowEntry.priority() != 5) {
+            //flowRuleService.getFlowEntries(deviceId).forEach(flowRuleService::removeFlowRules);
+            flowRuleService.getFlowEntries(deviceId).forEach(flowEntry -> {
+                if (flowEntry.priority() != 5 || flowEntry.appId() != appId.id()) {
                     flowRuleService.removeFlowRules(flowEntry);
                 }
-            });*/
+            });
         } else {
             log.error("FlowRuleService is not available");
         }
@@ -216,27 +218,32 @@ public class MTD implements MTDInterface{
         for (Device device : devices) {
             emptyTable(device.id());
 
-            TrafficTreatment treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.CONTROLLER).build();
+            if (installDefaultRule) {
+                TrafficTreatment treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.CONTROLLER).build();
 
-            //log.info("Antes de instalar a regra");
-            if (flowRuleService != null) {
-                log.info("Entrei para instalar a regra");
-                FlowRule flowRule = DefaultFlowRule.builder()
-                        .forDevice(device.id())
-                        .withSelector(DefaultTrafficSelector.emptySelector())
-                        .withTreatment(treatment)
-                        .withPriority(5)
-                        .fromApp(appId)
-                        .makePermanent().build();
+                //log.info("Antes de instalar a regra");
+                if (flowRuleService != null) {
+                    log.info("Entrei para instalar a regra");
+                    FlowRule flowRule = DefaultFlowRule.builder()
+                            .forDevice(device.id())
+                            .withSelector(DefaultTrafficSelector.emptySelector())
+                            .withTreatment(treatment)
+                            .withPriority(5)
+                            .fromApp(appId)
+                            .makePermanent().build();
 
-                flowRuleService.applyFlowRules(flowRule);
+                    flowRuleService.applyFlowRules(flowRule);
 
-                log.info("Device {} regra instalada", device.id());
-            } else {
-                log.error("FlowRuleService is not available");
+                    log.info("Device {} regra instalada", device.id());
+                } else {
+                    log.error("FlowRuleService is not available");
+                }
+
+
             }
 
         }
+        if (installDefaultRule) installDefaultRule = false;
     }
 
     private class MTDPacketProcessor implements PacketProcessor {
@@ -272,6 +279,7 @@ public class MTD implements MTDInterface{
 
             pktDrop = false;
             //boolean redirect = true;
+            Ethernet arpReply = null;
 
             //log.info("Device: {}", deviceId);
             if (ethPkt.getEtherType() == Ethernet.TYPE_ARP) {
@@ -310,6 +318,15 @@ public class MTD implements MTDInterface{
 
                     dstMac = realIpToMAC.get(virtualToReal.get(dstIp));
                     ethPkt.setDestinationMACAddress(dstMac);
+
+                    if (dstIp.equals(realToVirtual.get(server))) {
+                        arpReply = ARP.buildArpReply(
+                                dstIp,
+                                realIpToMAC.get(honeypot),
+                                ethPkt);
+                        
+                    }
+
                     if (dirConnect(deviceId, virtualToReal.get(dstIp))) {
 
                         //log.info("ARP: IP DESTINO virtual {} -> real {}", dstIp, virtualToReal.get(dstIp));
@@ -498,7 +515,7 @@ public class MTD implements MTDInterface{
             // simply forward out to the destination and bail.
             if (pkt.receivedFrom().deviceId().equals(dst.location().deviceId())) {
                 if (!context.inPacket().receivedFrom().port().equals(dst.location().port())) {
-                    installRule(deviceId, context, dst.location().port(), treatmentBuilder, selectorBuilder);
+                    installRule(deviceId, context, dst.location().port(), treatmentBuilder, selectorBuilder, arpReply);
                 }
                 return;
             }
@@ -526,14 +543,14 @@ public class MTD implements MTDInterface{
             }
             outPort = path.src().port();
 
-            installRule(deviceId, context, outPort, treatmentBuilder, selectorBuilder);
+            installRule(deviceId, context, outPort, treatmentBuilder, selectorBuilder, arpReply);
 
 
         }
 
     }
 
-    private void installRule(DeviceId deviceId, PacketContext context, PortNumber outPort, TrafficTreatment.Builder treatmentBuilder, TrafficSelector.Builder selectorBuilder){
+    private void installRule(DeviceId deviceId, PacketContext context, PortNumber outPort, TrafficTreatment.Builder treatmentBuilder, TrafficSelector.Builder selectorBuilder, Ethernet arpReply){
 
         if (!pktDrop) {
 
@@ -557,7 +574,22 @@ public class MTD implements MTDInterface{
             return;
         }
 
-        packetOut(context,  PortNumber.TABLE);
+        if(arpReply != null) {
+            TrafficTreatment.Builder treatment = DefaultTrafficTreatment.builder();
+
+            treatment.setOutput(PortNumber.TABLE);
+
+            OutboundPacket outboundPacket = new DefaultOutboundPacket(
+                    context.inPacket().receivedFrom().deviceId(),
+                    treatment.build(),
+                    ByteBuffer.wrap(arpReply.serialize()));
+
+            packetService.emit(outboundPacket);
+        } else {
+            packetOut(context,  PortNumber.TABLE);
+        }
+
+
     }
 
 

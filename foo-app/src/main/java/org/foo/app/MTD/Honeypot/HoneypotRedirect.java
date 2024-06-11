@@ -217,14 +217,14 @@ public class HoneypotRedirect implements HoneypotRedirectInterface {
                 Ip4Address srcIp = Ip4Address.valueOf(ipv4Packet.getSourceAddress());
                 Ip4Address dstIp = Ip4Address.valueOf(ipv4Packet.getDestinationAddress());
 
-                if (ipv4Protocol == IPv4.PROTOCOL_TCP) {
+                if (ipv4Protocol == IPv4.PROTOCOL_TCP || ipv4Protocol == IPv4.PROTOCOL_UDP) {
                     if (dstIp.equals(server)) {
 
                         log.info("dst: server -> honeypot");
                         selector.matchIPSrc(IpPrefix.valueOf(ipv4Packet.getSourceAddress(), Ip4Prefix.MAX_MASK_LENGTH))
                                 .matchIPDst(IpPrefix.valueOf(ipv4Packet.getDestinationAddress(), Ip4Prefix.MAX_MASK_LENGTH))
-                                .matchEthType(Ethernet.TYPE_IPV4)
-                                .matchIPProtocol(IPv4.PROTOCOL_TCP);
+                                .matchEthType(Ethernet.TYPE_IPV4);
+                                //.matchIPProtocol(ipv4Protocol);
 
                         ipv4Packet.setDestinationAddress(honeypot.toInt());
                         ethPkt.setDestinationMACAddress(honeypotMac);
@@ -239,8 +239,8 @@ public class HoneypotRedirect implements HoneypotRedirectInterface {
                         log.info("honeypot to attacker");
                         selector.matchIPSrc(IpPrefix.valueOf(ipv4Packet.getSourceAddress(), Ip4Prefix.MAX_MASK_LENGTH))
                                 .matchIPDst(IpPrefix.valueOf(ipv4Packet.getDestinationAddress(), Ip4Prefix.MAX_MASK_LENGTH))
-                                .matchEthType(Ethernet.TYPE_IPV4)
-                                .matchIPProtocol(IPv4.PROTOCOL_TCP);
+                                .matchEthType(Ethernet.TYPE_IPV4);
+                                //.matchIPProtocol(ipv4Protocol);
 
                         ipv4Packet.setSourceAddress(server.toInt());
                         //ethPkt.setSourceMACAddress(serverMac);
