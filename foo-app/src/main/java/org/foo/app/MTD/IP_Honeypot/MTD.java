@@ -6,11 +6,13 @@ import com.google.common.collect.Maps;
 import org.foo.app.MTD.IP.IPShuffling;
 import org.onlab.packet.ARP;
 import org.onlab.packet.Ethernet;
+import org.onlab.packet.ICMP;
 import org.onlab.packet.IPv4;
 import org.onlab.packet.Ip4Address;
 import org.onlab.packet.Ip4Prefix;
 import org.onlab.packet.IpAddress;
 import org.onlab.packet.MacAddress;
+import org.onlab.packet.TCP;
 import org.onosproject.core.ApplicationId;
 import org.onosproject.core.CoreService;
 import org.onosproject.net.ConnectPoint;
@@ -83,7 +85,7 @@ public class MTD implements MTDInterface{
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private final long SHUFFLE_INTERVAL = 240000;
+    private final long SHUFFLE_INTERVAL = 2040000;
 
     //private final Map<PortNumber, IpAddress> hostToIp = new HashMap<>();
     //private final Map<IpAddress, PortNumber> ipToHost = new HashMap<>();
@@ -117,7 +119,7 @@ public class MTD implements MTDInterface{
     private boolean pktDrop;
 
     private boolean installDefaultRule = true;
-
+    private boolean redirected = false;
 
     @Activate
     protected void activate() {
@@ -223,7 +225,7 @@ public class MTD implements MTDInterface{
 
                 //log.info("Antes de instalar a regra");
                 if (flowRuleService != null) {
-                    log.info("Entrei para instalar a regra");
+                    //log.info("Entrei para instalar a regra");
                     FlowRule flowRule = DefaultFlowRule.builder()
                             .forDevice(device.id())
                             .withSelector(DefaultTrafficSelector.emptySelector())
@@ -234,7 +236,7 @@ public class MTD implements MTDInterface{
 
                     flowRuleService.applyFlowRules(flowRule);
 
-                    log.info("Device {} regra instalada", device.id());
+                    //log.info("Device {} regra instalada", device.id());
                 } else {
                     log.error("FlowRuleService is not available");
                 }
@@ -319,7 +321,7 @@ public class MTD implements MTDInterface{
                     dstMac = realIpToMAC.get(virtualToReal.get(dstIp));
                     ethPkt.setDestinationMACAddress(dstMac);
 
-                    if (dstIp.equals(realToVirtual.get(server))) {
+                    if (srcIp.equals(realToVirtual.get(attacker)) && dstIp.equals(realToVirtual.get(server))) {
                         arpReply = ARP.buildArpReply(
                                 dstIp,
                                 realIpToMAC.get(honeypot),
@@ -374,7 +376,8 @@ public class MTD implements MTDInterface{
                         Ip4Prefix.valueOf(ipv4Packet.getDestinationAddress(),
                                 Ip4Prefix.MAX_MASK_LENGTH);
                 //log.info("Device: {}", deviceId);
-                //log.info("Pacotes do tipo ICMP - Source: {} - Destination: {}", srcIp, dstIp);
+                if (deviceId.equals(DeviceId.deviceId("of:0000000000000001")))
+                    log.info("Pacotes do tipo ICMP - Source: {} - Destination: {}", srcIp, dstIp);
 
                 if (rIP(srcIp) && !hostAtSwitch.containsKey(srcIp)) {
                     hostAtSwitch.put(srcIp, deviceId);
@@ -382,8 +385,7 @@ public class MTD implements MTDInterface{
                 }
 
                 byte ipv4Protocol = ipv4Packet.getProtocol();
-
-
+                log.info("Redirect: {}", redirected);
 
                 if (rIP(srcIp)) {
                     //log.info("ICMP: IP de ORIGEM real {} -> virtual {}", srcIp, realToVirtual.get(srcIp));
@@ -393,10 +395,13 @@ public class MTD implements MTDInterface{
                             .matchInPort(portNumber)
                             .matchIPSrc(matchIp4SrcPrefix)
                             .matchIPDst(matchIp4DstPrefix);
-                    log.info("SRC IP: {}", srcIp);
-                    if (ipv4Protocol == IPv4.PROTOCOL_TCP && srcIp.equals(honeypot)) {
+                    //log.info("SRC IP: {}", srcIp);
+                    if (redirected && srcIp.equals(honeypot) && ( dstIp.equals(attacker) || dstIp.equals(realToVirtual.get(attacker)) )) {
                         log.info("Honeypot");
-                        selectorBuilder.matchIPProtocol(IPv4.PROTOCOL_TCP);
+                        //selectorBuilder.matchIPProtocol(IPv4.PROTOCOL_TCP);
+
+                        if(dstIp.equals(virtualToReal.get(server)) && dirConnect(deviceId, server))
+                            redirected = false;
 
                         ipv4Packet.setSourceAddress(String.valueOf(realToVirtual.get(server)));
 
@@ -416,9 +421,10 @@ public class MTD implements MTDInterface{
                             .matchIPSrc(matchIp4SrcPrefix)
                             .matchIPDst(matchIp4DstPrefix);
 
-                    if (ipv4Protocol == IPv4.PROTOCOL_TCP && dstIp.equals(realToVirtual.get(server))) {
+                    if (srcIp.equals(realToVirtual.get(attacker)) && dstIp.equals(realToVirtual.get(server))) {
                         log.info("dst VIRTUAL: server -> honeypot");
-                        selectorBuilder.matchIPProtocol(IPv4.PROTOCOL_TCP);
+                        log.info("src: {} / dst: {}", srcIp, dstIp);
+                        //selectorBuilder.matchIPProtocol(IPv4.PROTOCOL_TCP);
 
                         ipv4Packet.setDestinationAddress(String.valueOf(realToVirtual.get(honeypot)));
                         dstMac = realIpToMAC.get(honeypot);
@@ -426,7 +432,7 @@ public class MTD implements MTDInterface{
 
                         treatmentBuilder.setIpDst(IpAddress.valueOf(ipv4Packet.getDestinationAddress()))
                                 .setEthDst(ethPkt.getDestinationMAC());
-
+                        redirected = true;
                     } else {
                         dstMac =  realIpToMAC.get(virtualToReal.get(dstIp));
                         ethPkt.setDestinationMACAddress(dstMac);
@@ -503,7 +509,7 @@ public class MTD implements MTDInterface{
             //} else {
             //    outPort = PortNumber.FLOOD;
             //}
-            log.info("dstMAC: {}", dstMac);
+            //log.info("dstMAC: {}", dstMac);
             Host dst = hostService.getHost(HostId.hostId(dstMac));
             if (dst == null) {
                 log.info("Host não encontrado");

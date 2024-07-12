@@ -71,7 +71,7 @@ public class IPShuffling implements IPShufflingInterface {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private final long SHUFFLE_INTERVAL = 240000;
+    private final long SHUFFLE_INTERVAL = 30000;
 
     //private final Map<PortNumber, IpAddress> hostToIp = new HashMap<>();
     //private final Map<IpAddress, PortNumber> ipToHost = new HashMap<>();
