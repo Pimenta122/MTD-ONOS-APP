@@ -85,7 +85,7 @@ public class MTD implements MTDInterface{
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private final long SHUFFLE_INTERVAL = 2040000;
+    private final long SHUFFLE_INTERVAL = 60000;
 
     //private final Map<PortNumber, IpAddress> hostToIp = new HashMap<>();
     //private final Map<IpAddress, PortNumber> ipToHost = new HashMap<>();
@@ -351,7 +351,7 @@ public class MTD implements MTDInterface{
                     //dstMac = realIpToMAC.get(dstIp);
                     if (!dirConnect(deviceId, dstIp)) {
                         // drop packets
-                        log.info("ARP: 1-Dropping packets from...");
+                        //log.info("ARP: 1-Dropping packets from...");
                         treatmentBuilder.drop();
                         pktDrop = true;
                     }
@@ -360,7 +360,7 @@ public class MTD implements MTDInterface{
                     // drop packets
                     pktDrop = true;
                     treatmentBuilder.drop();
-                    log.info("ARP: 2-Dropping packets from...");
+                    //log.info("ARP: 2-Dropping packets from...");
                 }
 
             } else if (ethPkt.getEtherType() == Ethernet.TYPE_IPV4) {
@@ -376,8 +376,8 @@ public class MTD implements MTDInterface{
                         Ip4Prefix.valueOf(ipv4Packet.getDestinationAddress(),
                                 Ip4Prefix.MAX_MASK_LENGTH);
                 //log.info("Device: {}", deviceId);
-                if (deviceId.equals(DeviceId.deviceId("of:0000000000000001")))
-                    log.info("Pacotes do tipo ICMP - Source: {} - Destination: {}", srcIp, dstIp);
+                //if (deviceId.equals(DeviceId.deviceId("of:0000000000000001")))
+                    //log.info("Pacotes do tipo ICMP - Source: {} - Destination: {}", srcIp, dstIp);
 
                 if (rIP(srcIp) && !hostAtSwitch.containsKey(srcIp)) {
                     hostAtSwitch.put(srcIp, deviceId);
@@ -385,7 +385,7 @@ public class MTD implements MTDInterface{
                 }
 
                 byte ipv4Protocol = ipv4Packet.getProtocol();
-                log.info("Redirect: {}", redirected);
+                //log.info("Redirect: {}", redirected);
 
                 if (rIP(srcIp)) {
                     //log.info("ICMP: IP de ORIGEM real {} -> virtual {}", srcIp, realToVirtual.get(srcIp));
@@ -397,7 +397,7 @@ public class MTD implements MTDInterface{
                             .matchIPDst(matchIp4DstPrefix);
                     //log.info("SRC IP: {}", srcIp);
                     if (redirected && srcIp.equals(honeypot) && ( dstIp.equals(attacker) || dstIp.equals(realToVirtual.get(attacker)) )) {
-                        log.info("Honeypot");
+                        //log.info("Honeypot");
                         //selectorBuilder.matchIPProtocol(IPv4.PROTOCOL_TCP);
 
                         if(dstIp.equals(virtualToReal.get(server)) && dirConnect(deviceId, server))
@@ -421,9 +421,9 @@ public class MTD implements MTDInterface{
                             .matchIPSrc(matchIp4SrcPrefix)
                             .matchIPDst(matchIp4DstPrefix);
 
-                    if (srcIp.equals(realToVirtual.get(attacker)) && dstIp.equals(realToVirtual.get(server))) {
-                        log.info("dst VIRTUAL: server -> honeypot");
-                        log.info("src: {} / dst: {}", srcIp, dstIp);
+                    if (/*srcIp.equals(realToVirtual.get(attacker)) && */dstIp.equals(realToVirtual.get(server))) {
+                        //log.info("dst VIRTUAL: server -> honeypot");
+                        //log.info("src: {} / dst: {}", srcIp, dstIp);
                         //selectorBuilder.matchIPProtocol(IPv4.PROTOCOL_TCP);
 
                         ipv4Packet.setDestinationAddress(String.valueOf(realToVirtual.get(honeypot)));
@@ -474,7 +474,7 @@ public class MTD implements MTDInterface{
                     //dstMac = realIpToMAC.get(dstIp);
                     if (!dirConnect(deviceId, dstIp)) {
                         // drop packets
-                        log.info("ICMP: 1-Dropping packets from...");
+                        //log.info("ICMP: 1-Dropping packets from...");
 
                         treatmentBuilder.drop();
                         pktDrop = true;
@@ -484,7 +484,7 @@ public class MTD implements MTDInterface{
                     // drop packets
                     pktDrop = true;
                     treatmentBuilder.drop();
-                    log.info("ICMP: 2-Dropping packets from...");
+                    //log.info("ICMP: 2-Dropping packets from...");
                 }
 
             }
@@ -512,7 +512,7 @@ public class MTD implements MTDInterface{
             //log.info("dstMAC: {}", dstMac);
             Host dst = hostService.getHost(HostId.hostId(dstMac));
             if (dst == null) {
-                log.info("Host não encontrado");
+                //log.info("Host não encontrado");
                 flood(context);
                 return;
             }
@@ -547,6 +547,7 @@ public class MTD implements MTDInterface{
                 flood(context);
                 return;
             }
+            log.info("Path: {}", path);
             outPort = path.src().port();
 
             installRule(deviceId, context, outPort, treatmentBuilder, selectorBuilder, arpReply);
