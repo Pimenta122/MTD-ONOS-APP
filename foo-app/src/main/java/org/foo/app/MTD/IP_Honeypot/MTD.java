@@ -189,7 +189,7 @@ public class MTD implements MTDInterface{
 
     public void emptyTable(DeviceId deviceId) {
         if (flowRuleService != null) {
-            //flowRuleService.getFlowEntries(deviceId).forEach(flowRuleService::removeFlowRules);
+
             flowRuleService.getFlowEntries(deviceId).forEach(flowEntry -> {
                 if (flowEntry.priority() != 5 || flowEntry.appId() != appId.id()) {
                     flowRuleService.removeFlowRules(flowEntry);
@@ -223,9 +223,8 @@ public class MTD implements MTDInterface{
             if (installDefaultRule) {
                 TrafficTreatment treatment = DefaultTrafficTreatment.builder().setOutput(PortNumber.CONTROLLER).build();
 
-                //log.info("Antes de instalar a regra");
+
                 if (flowRuleService != null) {
-                    //log.info("Entrei para instalar a regra");
                     FlowRule flowRule = DefaultFlowRule.builder()
                             .forDevice(device.id())
                             .withSelector(DefaultTrafficSelector.emptySelector())
@@ -236,7 +235,6 @@ public class MTD implements MTDInterface{
 
                     flowRuleService.applyFlowRules(flowRule);
 
-                    //log.info("Device {} regra instalada", device.id());
                 } else {
                     log.error("FlowRuleService is not available");
                 }
@@ -289,8 +287,6 @@ public class MTD implements MTDInterface{
                 ARP arpPacket = (ARP) ethPkt.getPayload();
                 Ip4Address srcIp = Ip4Address.valueOf(arpPacket.getSenderProtocolAddress());
                 Ip4Address dstIp = Ip4Address.valueOf(arpPacket.getTargetProtocolAddress());
-                //log.info("Device: {}", deviceId);
-                //log.info("pacotes do tipo ARP - Source: {} - Destination: {}", srcIp, dstIp);
 
                 if (rIP(srcIp) && !hostAtSwitch.containsKey(srcIp)) {
                     hostAtSwitch.put(srcIp, deviceId);
@@ -299,14 +295,13 @@ public class MTD implements MTDInterface{
 
                 if (rIP(srcIp)) {
 
-                    //log.info("ARP: IP de ORIGEM real {} -> virtual {}", srcIp, realToVirtual.get(srcIp));
+
                     selectorBuilder.matchEthType(Ethernet.TYPE_ARP)
                             .matchInPort(portNumber)
                             .matchArpSpa(srcIp)
                             .matchArpTpa(dstIp);
 
                     treatmentBuilder.setArpSpa(realToVirtual.get(srcIp));
-                    //.setEthSrc(ethPkt.getSourceMAC());
 
 
                 }
@@ -331,14 +326,8 @@ public class MTD implements MTDInterface{
 
                     if (dirConnect(deviceId, virtualToReal.get(dstIp))) {
 
-                        //log.info("ARP: IP DESTINO virtual {} -> real {}", dstIp, virtualToReal.get(dstIp));
 
-
-                        //dstMac =  realIpToMAC.get(virtualToReal.get(dstIp));
-                        //ethPkt.setDestinationMACAddress(dstMac);
                         treatmentBuilder.setArpTpa(virtualToReal.get(dstIp));
-
-                        //log.info("ARP: Destination Mac {}", dstMac);
 
                     }
                 } else if (rIP(dstIp)) {
@@ -347,11 +336,9 @@ public class MTD implements MTDInterface{
                             .matchInPort(portNumber)
                             .matchArpSpa(srcIp)
                             .matchArpTpa(dstIp);
-                    //TODO: verificar se descomento a linha seguinte
-                    //dstMac = realIpToMAC.get(dstIp);
                     if (!dirConnect(deviceId, dstIp)) {
                         // drop packets
-                        //log.info("ARP: 1-Dropping packets from...");
+
                         treatmentBuilder.drop();
                         pktDrop = true;
                     }
@@ -360,7 +347,6 @@ public class MTD implements MTDInterface{
                     // drop packets
                     pktDrop = true;
                     treatmentBuilder.drop();
-                    //log.info("ARP: 2-Dropping packets from...");
                 }
 
             } else if (ethPkt.getEtherType() == Ethernet.TYPE_IPV4) {
@@ -375,9 +361,7 @@ public class MTD implements MTDInterface{
                 Ip4Prefix matchIp4DstPrefix =
                         Ip4Prefix.valueOf(ipv4Packet.getDestinationAddress(),
                                 Ip4Prefix.MAX_MASK_LENGTH);
-                //log.info("Device: {}", deviceId);
-                //if (deviceId.equals(DeviceId.deviceId("of:0000000000000001")))
-                    //log.info("Pacotes do tipo ICMP - Source: {} - Destination: {}", srcIp, dstIp);
+
 
                 if (rIP(srcIp) && !hostAtSwitch.containsKey(srcIp)) {
                     hostAtSwitch.put(srcIp, deviceId);
@@ -388,17 +372,16 @@ public class MTD implements MTDInterface{
                 //log.info("Redirect: {}", redirected);
 
                 if (rIP(srcIp)) {
-                    //log.info("ICMP: IP de ORIGEM real {} -> virtual {}", srcIp, realToVirtual.get(srcIp));
+
                     selectorBuilder.matchEthType(Ethernet.TYPE_IPV4)
                             .matchEthSrc(ethPkt.getSourceMAC())
                             .matchEthDst(ethPkt.getDestinationMAC())
                             .matchInPort(portNumber)
                             .matchIPSrc(matchIp4SrcPrefix)
                             .matchIPDst(matchIp4DstPrefix);
-                    //log.info("SRC IP: {}", srcIp);
+
                     if (redirected && srcIp.equals(honeypot) && ( dstIp.equals(attacker) || dstIp.equals(realToVirtual.get(attacker)) )) {
-                        //log.info("Honeypot");
-                        //selectorBuilder.matchIPProtocol(IPv4.PROTOCOL_TCP);
+
 
                         if(dstIp.equals(virtualToReal.get(server)) && dirConnect(deviceId, server))
                             redirected = false;
@@ -421,10 +404,8 @@ public class MTD implements MTDInterface{
                             .matchIPSrc(matchIp4SrcPrefix)
                             .matchIPDst(matchIp4DstPrefix);
 
-                    if (/*srcIp.equals(realToVirtual.get(attacker)) && */dstIp.equals(realToVirtual.get(server))) {
-                        //log.info("dst VIRTUAL: server -> honeypot");
-                        //log.info("src: {} / dst: {}", srcIp, dstIp);
-                        //selectorBuilder.matchIPProtocol(IPv4.PROTOCOL_TCP);
+                    if (dstIp.equals(realToVirtual.get(server))) {
+
 
                         ipv4Packet.setDestinationAddress(String.valueOf(realToVirtual.get(honeypot)));
                         dstMac = realIpToMAC.get(honeypot);
@@ -437,29 +418,12 @@ public class MTD implements MTDInterface{
                         dstMac =  realIpToMAC.get(virtualToReal.get(dstIp));
                         ethPkt.setDestinationMACAddress(dstMac);
                     }
-                    //dstMac =  realIpToMAC.get(virtualToReal.get(dstIp));
-                    //ethPkt.setDestinationMACAddress(dstMac);
+
 
                     if (dirConnect(deviceId, virtualToReal.get(dstIp))) {
-                        //log.info("ICMP: IP DESTINO virtual {} -> real {}", dstIp, virtualToReal.get(dstIp));
 
-                        /*if (ipv4Protocol == IPv4.PROTOCOL_TCP && dstIp.equals(realToVirtual.get(server))) {
-                            log.info("dst REAL: server -> honeypot");
-                            selectorBuilder.matchIPProtocol(IPv4.PROTOCOL_TCP);
-
-                            ipv4Packet.setDestinationAddress(honeypot.toInt());
-                            ethPkt.setDestinationMACAddress(realIpToMAC.get(honeypot));
-
-                            treatmentBuilder.setIpDst(IpAddress.valueOf(ipv4Packet.getDestinationAddress()))
-                                    .setEthDst(ethPkt.getDestinationMAC());
-
-                        } else {
-                            treatmentBuilder.setIpDst(virtualToReal.get(dstIp));
-                        }*/
 
                         treatmentBuilder.setIpDst(virtualToReal.get(dstIp));
-
-                        //log.info("ICMP: Destination Mac {}", dstMac);
 
                     }
                 } else if (rIP(dstIp)) {
@@ -470,11 +434,8 @@ public class MTD implements MTDInterface{
                             .matchEthDst(ethPkt.getDestinationMAC())
                             .matchIPSrc(matchIp4SrcPrefix)
                             .matchIPDst(matchIp4DstPrefix);
-                    //TODO: verificar se descomento a linha seguinte
-                    //dstMac = realIpToMAC.get(dstIp);
                     if (!dirConnect(deviceId, dstIp)) {
-                        // drop packets
-                        //log.info("ICMP: 1-Dropping packets from...");
+
 
                         treatmentBuilder.drop();
                         pktDrop = true;
@@ -488,28 +449,13 @@ public class MTD implements MTDInterface{
                 }
 
             }
-            //treatmentBuilder.immediate();
 
-            //MELHORAR ESTE CÓDIGO
             MacAddress srcMac = ethPkt.getSourceMAC();
             dstMac = ethPkt.getDestinationMAC();
 
-            //HostId id = HostId.hostId(dstMac);
-
-            //macToPort.putIfAbsent(deviceId, new HashMap<>());
-            // Logging the information
-            //log.info("Packet in " + deviceId + " " + srcMac + " " + dstMac + " " + portNumber);
-
-            //macToPort.get(deviceId).put(srcMac, portNumber);
 
             PortNumber outPort;
-            //if (macToPort.get(deviceId).containsKey(dstMac)) {
-            //    outPort = macToPort.get(deviceId).get(dstMac);
-            //    log.info("Porto In: {} -> Porto Out: {} -> dstMAC: {}", portNumber, outPort, dstMac);
-            //} else {
-            //    outPort = PortNumber.FLOOD;
-            //}
-            //log.info("dstMAC: {}", dstMac);
+
             Host dst = hostService.getHost(HostId.hostId(dstMac));
             if (dst == null) {
                 //log.info("Host não encontrado");
